@@ -2,8 +2,10 @@ import { getDefaultProvider, Wallet } from 'ethers'; // ethers v5
 import { Provider, TransactionResponse } from '@ethersproject/providers'; // ethers v5
 import { ERC721Client } from '@imtbl/contracts';
 
-const CONTRACT_ADDRESS = '[CONTRACT_ADDRESS]';
-const PRIVATE_KEY = '[PRIVATE_KEY]';
+//const CONTRACT_ADDRESS = '[CONTRACT_ADDRESS]';
+const CONTRACT_ADDRESS = '0x02e4ef6b3a5eb93f1d271a6744563bb87c7b89ea';
+//const PRIVATE_KEY = '[PRIVATE_KEY]';
+const PRIVATE_KEY = '6d84800c1cbe90a4199eb70fc2873bb544bf58cf3b825ae837d358cbb742508d';
 const provider = getDefaultProvider('https://rpc.testnet.immutable.com');
 
 const grantMinterRole = async (

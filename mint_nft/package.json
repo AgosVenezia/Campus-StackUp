@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@imtbl/contracts": "^2.0.2",
+    "@imtbl/contracts": "^2.0.4",
     "@imtbl/sdk": "^0.36.1",
     "ethers": "^5.7.2",
     "ts-node": "^10.9.2",
