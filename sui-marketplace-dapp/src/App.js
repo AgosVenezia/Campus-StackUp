@@ -76,6 +76,7 @@ function App() {
           options: { showContent: true },
     });
 
+    // eslint-disable-next-line eqeqeq
     if (objectInfo.data.content.type == `${packageId}::widget::Widget`) {
       const widgetObjectId = objectInfo.data.content.fields.id.id;
       console.log("widget spotted:", widgetObjectId);
