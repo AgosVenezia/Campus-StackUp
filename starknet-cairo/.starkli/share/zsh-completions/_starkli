@@ -1,0 +1,2009 @@
+#compdef starkli
+
+autoload -U is-at-least
+
+_starkli() {
+    typeset -A opt_args
+    typeset -a _arguments_options
+    local ret=1
+
+    if is-at-least 5.2; then
+        _arguments_options=(-s -S -C)
+    else
+        _arguments_options=(-s -C)
+    fi
+
+    local context curcontext="$curcontext" state line
+    _arguments "${_arguments_options[@]}" \
+'-V[Print version info and exit]' \
+'--version[Print version info and exit]' \
+'-v[Use verbose output (currently only applied to version)]' \
+'--verbose[Use verbose output (currently only applied to version)]' \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli_commands" \
+"*::: :->starkli" \
+&& ret=0
+    case $state in
+    (starkli)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-command-$line[1]:"
+        case $line[1] in
+            (selector)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+':name -- Selector name:' \
+&& ret=0
+;;
+(class-hash)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to contract artifact file:_files' \
+&& ret=0
+;;
+(to-cairo-string)
+_arguments "${_arguments_options[@]}" \
+'--dec[Display the encoded value in decimal representation]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':text -- Text to be encoded in felt:' \
+&& ret=0
+;;
+(parse-cairo-string)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+':felt -- Encoded string value in felt, in decimal or hexadecimal representation:' \
+&& ret=0
+;;
+(mont)
+_arguments "${_arguments_options[@]}" \
+'--hex[Emit array elements in hexadecimal format]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':felt -- Encoded string value in felt, in decimal or hexadecimal representation:' \
+&& ret=0
+;;
+(call)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':contract_address -- Contract address:' \
+':selector -- Name of the function being called:' \
+'*::calldata -- Raw function call arguments:' \
+&& ret=0
+;;
+(transaction)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':hash -- Transaction hash:' \
+&& ret=0
+;;
+(block-number)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(block-hash)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(block)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--full[Fetch full transactions instead of hashes only]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::block_id -- Block number, hash, or tag (latest/pending):' \
+&& ret=0
+;;
+(block-time)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'(--rfc2822)--unix[Show block time in Unix timestamp format]' \
+'(--unix)--rfc2822[Show block time in RFC 2822 format]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::block_id -- Block number, hash, or tag (latest/pending):' \
+&& ret=0
+;;
+(state-update)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::block_id -- Block number, hash, or tag (latest/pending):' \
+&& ret=0
+;;
+(block-traces)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::block_id -- Block number, hash, or tag (latest/pending):' \
+&& ret=0
+;;
+(status)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':hash -- Transaction hash:' \
+&& ret=0
+;;
+(receipt)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':hash -- Transaction hash:' \
+&& ret=0
+;;
+(trace)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':hash -- Transaction hash:' \
+&& ret=0
+;;
+(chain-id)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--no-decode[Do not show the decoded text]' \
+'--dec[Display the decimal instead of hexadecimal representation]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'::block_id -- Block number, hash, or tag (latest/pending):' \
+&& ret=0
+;;
+(balance)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'(--hex)--raw[Display raw balance amount in integer]' \
+'(--raw)--hex[Display balance amount in hexadecimal representation]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':account_address -- Account address:' \
+&& ret=0
+;;
+(nonce)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':address -- Contract address:' \
+&& ret=0
+;;
+(storage)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':address -- Contract address:' \
+':key -- Storage key:' \
+&& ret=0
+;;
+(class-hash-at)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':address -- Contract address:' \
+&& ret=0
+;;
+(class-by-hash)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--parse[Attempt to recover a flattened Sierra class or a compressed legacy class]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':hash -- Class hash:' \
+&& ret=0
+;;
+(class-at)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--parse[Attempt to recover a flattened Sierra class or a compressed legacy class]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':address -- Contract address:' \
+&& ret=0
+;;
+(syncing)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(spec-version)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(signer)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__signer_commands" \
+"*::: :->signer" \
+&& ret=0
+
+    case $state in
+    (signer)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-signer-command-$line[1]:"
+        case $line[1] in
+            (keystore)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__signer__keystore_commands" \
+"*::: :->keystore" \
+&& ret=0
+
+    case $state in
+    (keystore)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-signer-keystore-command-$line[1]:"
+        case $line[1] in
+            (new)
+_arguments "${_arguments_options[@]}" \
+'--password=[Supply password from command line option instead of prompt]:PASSWORD: ' \
+'--force[Overwrite the file if it already exists]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to save the JSON keystore:_files' \
+&& ret=0
+;;
+(from-key)
+_arguments "${_arguments_options[@]}" \
+'--password=[Supply password from command line option instead of prompt]:PASSWORD: ' \
+'--force[Overwrite the file if it already exists]' \
+'--private-key-stdin[Take the private key from stdin instead of prompt]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to save the JSON keystore:_files' \
+&& ret=0
+;;
+(inspect)
+_arguments "${_arguments_options[@]}" \
+'--password=[Supply password from command line option instead of prompt]:PASSWORD: ' \
+'--raw[Print the public key only]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to the JSON keystore:_files' \
+&& ret=0
+;;
+(inspect-private)
+_arguments "${_arguments_options[@]}" \
+'--password=[Supply password from command line option instead of prompt]:PASSWORD: ' \
+'--raw[Print the private key only]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to the JSON keystore:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__signer__keystore__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-signer-keystore-help-command-$line[1]:"
+        case $line[1] in
+            (new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(from-key)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect-private)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(gen-keypair)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__signer__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-signer-help-command-$line[1]:"
+        case $line[1] in
+            (keystore)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__signer__help__keystore_commands" \
+"*::: :->keystore" \
+&& ret=0
+
+    case $state in
+    (keystore)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-signer-help-keystore-command-$line[1]:"
+        case $line[1] in
+            (new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(from-key)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect-private)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(gen-keypair)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(account)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__account_commands" \
+"*::: :->account" \
+&& ret=0
+
+    case $state in
+    (account)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-command-$line[1]:"
+        case $line[1] in
+            (fetch)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--output=[Path to save the account config file]:OUTPUT:_files' \
+'--force[Overwrite the file if it already exists]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':address -- Contract address:' \
+&& ret=0
+;;
+(deploy)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'--max-fee=[Maximum transaction fee in Ether (18 decimals)]:MAX_FEE: ' \
+'--max-fee-raw=[Maximum transaction fee in Wei]:MAX_FEE_RAW: ' \
+'--nonce=[Provide transaction nonce manually]:NONCE: ' \
+'--poll-interval=[Transaction result poll interval in milliseconds]:POLL_INTERVAL: ' \
+'--estimate-only[Only estimate transaction fee without sending transaction]' \
+'--simulate[Simulate the transaction only]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to the account config file:_files' \
+&& ret=0
+;;
+(oz)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__account__oz_commands" \
+"*::: :->oz" \
+&& ret=0
+
+    case $state in
+    (oz)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-oz-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'-f[Overwrite the account config file if it already exists]' \
+'--force[Overwrite the account config file if it already exists]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':output -- Path to save the account config file:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__oz__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-oz-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(argent)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__account__argent_commands" \
+"*::: :->argent" \
+&& ret=0
+
+    case $state in
+    (argent)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-argent-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'-f[Overwrite the account config file if it already exists]' \
+'--force[Overwrite the account config file if it already exists]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':output -- Path to save the account config file:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__argent__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-argent-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(braavos)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+":: :_starkli__account__braavos_commands" \
+"*::: :->braavos" \
+&& ret=0
+
+    case $state in
+    (braavos)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-braavos-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'-f[Overwrite the account config file if it already exists]' \
+'--force[Overwrite the account config file if it already exists]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':output -- Path to save the account config file:_files' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__braavos__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-braavos-help-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-help-command-$line[1]:"
+        case $line[1] in
+            (fetch)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(deploy)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(oz)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__help__oz_commands" \
+"*::: :->oz" \
+&& ret=0
+
+    case $state in
+    (oz)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-help-oz-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(argent)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__help__argent_commands" \
+"*::: :->argent" \
+&& ret=0
+
+    case $state in
+    (argent)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-help-argent-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(braavos)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__account__help__braavos_commands" \
+"*::: :->braavos" \
+&& ret=0
+
+    case $state in
+    (braavos)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-account-help-braavos-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(invoke)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--account=[Path to account config JSON file]:ACCOUNT: ' \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'--max-fee=[Maximum transaction fee in Ether (18 decimals)]:MAX_FEE: ' \
+'--max-fee-raw=[Maximum transaction fee in Wei]:MAX_FEE_RAW: ' \
+'--nonce=[Provide transaction nonce manually]:NONCE: ' \
+'--poll-interval=[Transaction result poll interval in milliseconds]:POLL_INTERVAL: ' \
+'--estimate-only[Only estimate transaction fee without sending transaction]' \
+'--simulate[Simulate the transaction only]' \
+'-w[Wait for the transaction to confirm]' \
+'--watch[Wait for the transaction to confirm]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+'*::calls -- One or more contract calls. See documentation for more details:' \
+&& ret=0
+;;
+(declare)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--account=[Path to account config JSON file]:ACCOUNT: ' \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'--compiler-version=[Statically-linked Sierra compiler version]:COMPILER_VERSION:(2.4.0 2.5.3)' \
+'--compiler-path=[Path to the starknet-sierra-compile binary]:COMPILER_PATH:_files' \
+'--casm-file=[Path to already-compiled CASM file]:CASM_FILE:_files' \
+'--casm-hash=[Override Sierra compilation and use CASM hash directly]:CASM_HASH: ' \
+'--max-fee=[Maximum transaction fee in Ether (18 decimals)]:MAX_FEE: ' \
+'--max-fee-raw=[Maximum transaction fee in Wei]:MAX_FEE_RAW: ' \
+'--nonce=[Provide transaction nonce manually]:NONCE: ' \
+'--poll-interval=[Transaction result poll interval in milliseconds]:POLL_INTERVAL: ' \
+'--estimate-only[Only estimate transaction fee without sending transaction]' \
+'--simulate[Simulate the transaction only]' \
+'-w[Wait for the transaction to confirm]' \
+'--watch[Wait for the transaction to confirm]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':file -- Path to contract artifact file:_files' \
+&& ret=0
+;;
+(deploy)
+_arguments "${_arguments_options[@]}" \
+'--rpc=[Starknet JSON-RPC endpoint]:RPC: ' \
+'--network=[Starknet network]:NETWORK: ' \
+'--account=[Path to account config JSON file]:ACCOUNT: ' \
+'--keystore=[Path to keystore JSON file \[env\: STARKNET_KEYSTORE=\]]:KEYSTORE: ' \
+'--keystore-password=[Supply keystore password from command line option instead of prompt]:KEYSTORE_PASSWORD: ' \
+'--private-key=[Private key in hex in plain text \[env\: STARKNET_PRIVATE_KEY=\]]:PRIVATE_KEY: ' \
+'--max-fee=[Maximum transaction fee in Ether (18 decimals)]:MAX_FEE: ' \
+'--max-fee-raw=[Maximum transaction fee in Wei]:MAX_FEE_RAW: ' \
+'--salt=[Use the given salt to compute contract deploy address]:SALT: ' \
+'--nonce=[Provide transaction nonce manually]:NONCE: ' \
+'--poll-interval=[Transaction result poll interval in milliseconds]:POLL_INTERVAL: ' \
+'--not-unique[Do not derive contract address from deployer address]' \
+'--estimate-only[Only estimate transaction fee without sending transaction]' \
+'--simulate[Simulate the transaction only]' \
+'-w[Wait for the transaction to confirm]' \
+'--watch[Wait for the transaction to confirm]' \
+'--log-traffic[Log raw request/response traffic of providers]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':class_hash -- Class hash:' \
+'*::ctor_args -- Raw constructor arguments:' \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help]' \
+'--help[Print help]' \
+':shell -- Shell name:(bash elvish fish powershell zsh)' \
+&& ret=0
+;;
+(lab)
+_arguments "${_arguments_options[@]}" \
+'-h[Print help (see more with '\''--help'\'')]' \
+'--help[Print help (see more with '\''--help'\'')]' \
+":: :_starkli__lab_commands" \
+"*::: :->lab" \
+&& ret=0
+
+    case $state in
+    (lab)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-lab-command-$line[1]:"
+        case $line[1] in
+            (mine-udc-salt)
+_arguments "${_arguments_options[@]}" \
+'--prefix=[Prefix bits in BINARY representation, ASSUMING 252-BIT ADDRESSES]:PREFIX: ' \
+'--suffix=[Suffix bits in BINARY representation]:SUFFIX: ' \
+'--deployer-address=[Deployer address. Needed if and only if not using --no-unique]:DEPLOYER_ADDRESS: ' \
+'--jobs=[The number of parallel jobs to run]:JOBS: ' \
+'--not-unique[Do not derive contract address from deployer address]' \
+'-h[Print help]' \
+'--help[Print help]' \
+':class_hash -- Class hash:' \
+'*::ctor_args -- Raw constructor arguments (argument resolution not supported yet):' \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__lab__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-lab-help-command-$line[1]:"
+        case $line[1] in
+            (mine-udc-salt)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help_commands" \
+"*::: :->help" \
+&& ret=0
+
+    case $state in
+    (help)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-command-$line[1]:"
+        case $line[1] in
+            (selector)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(class-hash)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(to-cairo-string)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(parse-cairo-string)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(mont)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(call)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(transaction)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(block-number)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(block-hash)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(block)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(block-time)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(state-update)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(block-traces)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(status)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(receipt)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(trace)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(chain-id)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(balance)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(nonce)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(storage)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(class-hash-at)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(class-by-hash)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(class-at)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(syncing)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(spec-version)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(signer)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__signer_commands" \
+"*::: :->signer" \
+&& ret=0
+
+    case $state in
+    (signer)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-signer-command-$line[1]:"
+        case $line[1] in
+            (keystore)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__signer__keystore_commands" \
+"*::: :->keystore" \
+&& ret=0
+
+    case $state in
+    (keystore)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-signer-keystore-command-$line[1]:"
+        case $line[1] in
+            (new)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(from-key)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(inspect-private)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(gen-keypair)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(account)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__account_commands" \
+"*::: :->account" \
+&& ret=0
+
+    case $state in
+    (account)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-account-command-$line[1]:"
+        case $line[1] in
+            (fetch)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(deploy)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(oz)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__account__oz_commands" \
+"*::: :->oz" \
+&& ret=0
+
+    case $state in
+    (oz)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-account-oz-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(argent)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__account__argent_commands" \
+"*::: :->argent" \
+&& ret=0
+
+    case $state in
+    (argent)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-account-argent-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(braavos)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__account__braavos_commands" \
+"*::: :->braavos" \
+&& ret=0
+
+    case $state in
+    (braavos)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-account-braavos-command-$line[1]:"
+        case $line[1] in
+            (init)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+;;
+(invoke)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(declare)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(deploy)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(completions)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+(lab)
+_arguments "${_arguments_options[@]}" \
+":: :_starkli__help__lab_commands" \
+"*::: :->lab" \
+&& ret=0
+
+    case $state in
+    (lab)
+        words=($line[1] "${words[@]}")
+        (( CURRENT += 1 ))
+        curcontext="${curcontext%:*:*}:starkli-help-lab-command-$line[1]:"
+        case $line[1] in
+            (mine-udc-salt)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+(help)
+_arguments "${_arguments_options[@]}" \
+&& ret=0
+;;
+        esac
+    ;;
+esac
+;;
+        esac
+    ;;
+esac
+}
+
+(( $+functions[_starkli_commands] )) ||
+_starkli_commands() {
+    local commands; commands=(
+'selector:Calculate selector from name' \
+'class-hash:Calculate class hash from any contract artifacts (Sierra, casm, legacy)' \
+'to-cairo-string:Encode string into felt with the Cairo short string representation' \
+'parse-cairo-string:Decode string from felt with the Cairo short string representation' \
+'mont:Print the montgomery representation of a field element' \
+'call:Call contract functions without sending transactions' \
+'transaction:Get Starknet transaction by hash' \
+'block-number:Get latest block number' \
+'block-hash:Get latest block hash' \
+'block:Get Starknet block' \
+'block-time:Get Starknet block timestamp only' \
+'state-update:Get state update from a certain block' \
+'block-traces:Get all traces from a certain block' \
+'status:Get transaction status by hash' \
+'receipt:Get transaction receipt by hash' \
+'trace:Get transaction trace by hash' \
+'chain-id:Get Starknet network ID' \
+'balance:Get native gas token (currently ETH) balance' \
+'nonce:Get nonce for a certain contract' \
+'storage:Get storage value for a slot at a contract' \
+'class-hash-at:Get contract class hash deployed at a certain address' \
+'class-by-hash:Get contract class by hash' \
+'class-at:Get contract class deployed at a certain address' \
+'syncing:Get node syncing status' \
+'spec-version:Get node spec version' \
+'signer:Signer management commands' \
+'account:Account management commands' \
+'invoke:Send an invoke transaction from an account contract' \
+'declare:Declare a contract class' \
+'deploy:Deploy contract via the Universal Deployer Contract' \
+'completions:Generate shell completions script' \
+'lab:Experimental commands for fun and profit' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli commands' commands "$@"
+}
+(( $+functions[_starkli__account_commands] )) ||
+_starkli__account_commands() {
+    local commands; commands=(
+'fetch:Fetch account config from an already deployed account contract' \
+'deploy:Deploy account contract with a DeployAccount transaction' \
+'oz:Create and manage OpenZeppelin account contracts' \
+'argent:Create and manage Argent X account contracts' \
+'braavos:Create and manage Braavos account contracts' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account commands' commands "$@"
+}
+(( $+functions[_starkli__help__account_commands] )) ||
+_starkli__help__account_commands() {
+    local commands; commands=(
+'fetch:Fetch account config from an already deployed account contract' \
+'deploy:Deploy account contract with a DeployAccount transaction' \
+'oz:Create and manage OpenZeppelin account contracts' \
+'argent:Create and manage Argent X account contracts' \
+'braavos:Create and manage Braavos account contracts' \
+    )
+    _describe -t commands 'starkli help account commands' commands "$@"
+}
+(( $+functions[_starkli__account__argent_commands] )) ||
+_starkli__account__argent_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account argent commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__argent_commands] )) ||
+_starkli__account__help__argent_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli account help argent commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__argent_commands] )) ||
+_starkli__help__account__argent_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli help account argent commands' commands "$@"
+}
+(( $+functions[_starkli__balance_commands] )) ||
+_starkli__balance_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli balance commands' commands "$@"
+}
+(( $+functions[_starkli__help__balance_commands] )) ||
+_starkli__help__balance_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help balance commands' commands "$@"
+}
+(( $+functions[_starkli__block_commands] )) ||
+_starkli__block_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli block commands' commands "$@"
+}
+(( $+functions[_starkli__help__block_commands] )) ||
+_starkli__help__block_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help block commands' commands "$@"
+}
+(( $+functions[_starkli__block-hash_commands] )) ||
+_starkli__block-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli block-hash commands' commands "$@"
+}
+(( $+functions[_starkli__help__block-hash_commands] )) ||
+_starkli__help__block-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help block-hash commands' commands "$@"
+}
+(( $+functions[_starkli__block-number_commands] )) ||
+_starkli__block-number_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli block-number commands' commands "$@"
+}
+(( $+functions[_starkli__help__block-number_commands] )) ||
+_starkli__help__block-number_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help block-number commands' commands "$@"
+}
+(( $+functions[_starkli__block-time_commands] )) ||
+_starkli__block-time_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli block-time commands' commands "$@"
+}
+(( $+functions[_starkli__help__block-time_commands] )) ||
+_starkli__help__block-time_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help block-time commands' commands "$@"
+}
+(( $+functions[_starkli__block-traces_commands] )) ||
+_starkli__block-traces_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli block-traces commands' commands "$@"
+}
+(( $+functions[_starkli__help__block-traces_commands] )) ||
+_starkli__help__block-traces_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help block-traces commands' commands "$@"
+}
+(( $+functions[_starkli__account__braavos_commands] )) ||
+_starkli__account__braavos_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account braavos commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__braavos_commands] )) ||
+_starkli__account__help__braavos_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli account help braavos commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__braavos_commands] )) ||
+_starkli__help__account__braavos_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli help account braavos commands' commands "$@"
+}
+(( $+functions[_starkli__call_commands] )) ||
+_starkli__call_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli call commands' commands "$@"
+}
+(( $+functions[_starkli__help__call_commands] )) ||
+_starkli__help__call_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help call commands' commands "$@"
+}
+(( $+functions[_starkli__chain-id_commands] )) ||
+_starkli__chain-id_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli chain-id commands' commands "$@"
+}
+(( $+functions[_starkli__help__chain-id_commands] )) ||
+_starkli__help__chain-id_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help chain-id commands' commands "$@"
+}
+(( $+functions[_starkli__class-at_commands] )) ||
+_starkli__class-at_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli class-at commands' commands "$@"
+}
+(( $+functions[_starkli__help__class-at_commands] )) ||
+_starkli__help__class-at_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help class-at commands' commands "$@"
+}
+(( $+functions[_starkli__class-by-hash_commands] )) ||
+_starkli__class-by-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli class-by-hash commands' commands "$@"
+}
+(( $+functions[_starkli__help__class-by-hash_commands] )) ||
+_starkli__help__class-by-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help class-by-hash commands' commands "$@"
+}
+(( $+functions[_starkli__class-hash_commands] )) ||
+_starkli__class-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli class-hash commands' commands "$@"
+}
+(( $+functions[_starkli__help__class-hash_commands] )) ||
+_starkli__help__class-hash_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help class-hash commands' commands "$@"
+}
+(( $+functions[_starkli__class-hash-at_commands] )) ||
+_starkli__class-hash-at_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli class-hash-at commands' commands "$@"
+}
+(( $+functions[_starkli__help__class-hash-at_commands] )) ||
+_starkli__help__class-hash-at_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help class-hash-at commands' commands "$@"
+}
+(( $+functions[_starkli__completions_commands] )) ||
+_starkli__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli completions commands' commands "$@"
+}
+(( $+functions[_starkli__help__completions_commands] )) ||
+_starkli__help__completions_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help completions commands' commands "$@"
+}
+(( $+functions[_starkli__declare_commands] )) ||
+_starkli__declare_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli declare commands' commands "$@"
+}
+(( $+functions[_starkli__help__declare_commands] )) ||
+_starkli__help__declare_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help declare commands' commands "$@"
+}
+(( $+functions[_starkli__account__deploy_commands] )) ||
+_starkli__account__deploy_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account deploy commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__deploy_commands] )) ||
+_starkli__account__help__deploy_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help deploy commands' commands "$@"
+}
+(( $+functions[_starkli__deploy_commands] )) ||
+_starkli__deploy_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli deploy commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__deploy_commands] )) ||
+_starkli__help__account__deploy_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help account deploy commands' commands "$@"
+}
+(( $+functions[_starkli__help__deploy_commands] )) ||
+_starkli__help__deploy_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help deploy commands' commands "$@"
+}
+(( $+functions[_starkli__account__fetch_commands] )) ||
+_starkli__account__fetch_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account fetch commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__fetch_commands] )) ||
+_starkli__account__help__fetch_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help fetch commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__fetch_commands] )) ||
+_starkli__help__account__fetch_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help account fetch commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__keystore__from-key_commands] )) ||
+_starkli__help__signer__keystore__from-key_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help signer keystore from-key commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__keystore__from-key_commands] )) ||
+_starkli__signer__help__keystore__from-key_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help keystore from-key commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__from-key_commands] )) ||
+_starkli__signer__keystore__from-key_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore from-key commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help__from-key_commands] )) ||
+_starkli__signer__keystore__help__from-key_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore help from-key commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__gen-keypair_commands] )) ||
+_starkli__help__signer__gen-keypair_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help signer gen-keypair commands' commands "$@"
+}
+(( $+functions[_starkli__signer__gen-keypair_commands] )) ||
+_starkli__signer__gen-keypair_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer gen-keypair commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__gen-keypair_commands] )) ||
+_starkli__signer__help__gen-keypair_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help gen-keypair commands' commands "$@"
+}
+(( $+functions[_starkli__account__argent__help_commands] )) ||
+_starkli__account__argent__help_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account argent help commands' commands "$@"
+}
+(( $+functions[_starkli__account__argent__help__help_commands] )) ||
+_starkli__account__argent__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account argent help help commands' commands "$@"
+}
+(( $+functions[_starkli__account__braavos__help_commands] )) ||
+_starkli__account__braavos__help_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account braavos help commands' commands "$@"
+}
+(( $+functions[_starkli__account__braavos__help__help_commands] )) ||
+_starkli__account__braavos__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account braavos help help commands' commands "$@"
+}
+(( $+functions[_starkli__account__help_commands] )) ||
+_starkli__account__help_commands() {
+    local commands; commands=(
+'fetch:Fetch account config from an already deployed account contract' \
+'deploy:Deploy account contract with a DeployAccount transaction' \
+'oz:Create and manage OpenZeppelin account contracts' \
+'argent:Create and manage Argent X account contracts' \
+'braavos:Create and manage Braavos account contracts' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account help commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__help_commands] )) ||
+_starkli__account__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help help commands' commands "$@"
+}
+(( $+functions[_starkli__account__oz__help_commands] )) ||
+_starkli__account__oz__help_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account oz help commands' commands "$@"
+}
+(( $+functions[_starkli__account__oz__help__help_commands] )) ||
+_starkli__account__oz__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account oz help help commands' commands "$@"
+}
+(( $+functions[_starkli__help_commands] )) ||
+_starkli__help_commands() {
+    local commands; commands=(
+'selector:Calculate selector from name' \
+'class-hash:Calculate class hash from any contract artifacts (Sierra, casm, legacy)' \
+'to-cairo-string:Encode string into felt with the Cairo short string representation' \
+'parse-cairo-string:Decode string from felt with the Cairo short string representation' \
+'mont:Print the montgomery representation of a field element' \
+'call:Call contract functions without sending transactions' \
+'transaction:Get Starknet transaction by hash' \
+'block-number:Get latest block number' \
+'block-hash:Get latest block hash' \
+'block:Get Starknet block' \
+'block-time:Get Starknet block timestamp only' \
+'state-update:Get state update from a certain block' \
+'block-traces:Get all traces from a certain block' \
+'status:Get transaction status by hash' \
+'receipt:Get transaction receipt by hash' \
+'trace:Get transaction trace by hash' \
+'chain-id:Get Starknet network ID' \
+'balance:Get native gas token (currently ETH) balance' \
+'nonce:Get nonce for a certain contract' \
+'storage:Get storage value for a slot at a contract' \
+'class-hash-at:Get contract class hash deployed at a certain address' \
+'class-by-hash:Get contract class by hash' \
+'class-at:Get contract class deployed at a certain address' \
+'syncing:Get node syncing status' \
+'spec-version:Get node spec version' \
+'signer:Signer management commands' \
+'account:Account management commands' \
+'invoke:Send an invoke transaction from an account contract' \
+'declare:Declare a contract class' \
+'deploy:Deploy contract via the Universal Deployer Contract' \
+'completions:Generate shell completions script' \
+'lab:Experimental commands for fun and profit' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli help commands' commands "$@"
+}
+(( $+functions[_starkli__help__help_commands] )) ||
+_starkli__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help help commands' commands "$@"
+}
+(( $+functions[_starkli__lab__help_commands] )) ||
+_starkli__lab__help_commands() {
+    local commands; commands=(
+'mine-udc-salt:Mine UDC contract deployment salt for specific address prefix and/or suffix' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli lab help commands' commands "$@"
+}
+(( $+functions[_starkli__lab__help__help_commands] )) ||
+_starkli__lab__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli lab help help commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help_commands] )) ||
+_starkli__signer__help_commands() {
+    local commands; commands=(
+'keystore:Keystore management commands' \
+'gen-keypair:Randomly generate a new key pair' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli signer help commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__help_commands] )) ||
+_starkli__signer__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help help commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help_commands] )) ||
+_starkli__signer__keystore__help_commands() {
+    local commands; commands=(
+'new:Randomly generate a new keystore' \
+'from-key:Create a keystore file from an existing private key' \
+'inspect:Check the public key of an existing keystore file' \
+'inspect-private:Check the private key of an existing keystore file' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli signer keystore help commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help__help_commands] )) ||
+_starkli__signer__keystore__help__help_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore help help commands' commands "$@"
+}
+(( $+functions[_starkli__account__argent__help__init_commands] )) ||
+_starkli__account__argent__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account argent help init commands' commands "$@"
+}
+(( $+functions[_starkli__account__argent__init_commands] )) ||
+_starkli__account__argent__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account argent init commands' commands "$@"
+}
+(( $+functions[_starkli__account__braavos__help__init_commands] )) ||
+_starkli__account__braavos__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account braavos help init commands' commands "$@"
+}
+(( $+functions[_starkli__account__braavos__init_commands] )) ||
+_starkli__account__braavos__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account braavos init commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__argent__init_commands] )) ||
+_starkli__account__help__argent__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help argent init commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__braavos__init_commands] )) ||
+_starkli__account__help__braavos__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help braavos init commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__oz__init_commands] )) ||
+_starkli__account__help__oz__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account help oz init commands' commands "$@"
+}
+(( $+functions[_starkli__account__oz__help__init_commands] )) ||
+_starkli__account__oz__help__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account oz help init commands' commands "$@"
+}
+(( $+functions[_starkli__account__oz__init_commands] )) ||
+_starkli__account__oz__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli account oz init commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__argent__init_commands] )) ||
+_starkli__help__account__argent__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help account argent init commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__braavos__init_commands] )) ||
+_starkli__help__account__braavos__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help account braavos init commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__oz__init_commands] )) ||
+_starkli__help__account__oz__init_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help account oz init commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__keystore__inspect_commands] )) ||
+_starkli__help__signer__keystore__inspect_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help signer keystore inspect commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__keystore__inspect_commands] )) ||
+_starkli__signer__help__keystore__inspect_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help keystore inspect commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help__inspect_commands] )) ||
+_starkli__signer__keystore__help__inspect_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore help inspect commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__inspect_commands] )) ||
+_starkli__signer__keystore__inspect_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore inspect commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__keystore__inspect-private_commands] )) ||
+_starkli__help__signer__keystore__inspect-private_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help signer keystore inspect-private commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__keystore__inspect-private_commands] )) ||
+_starkli__signer__help__keystore__inspect-private_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help keystore inspect-private commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help__inspect-private_commands] )) ||
+_starkli__signer__keystore__help__inspect-private_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore help inspect-private commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__inspect-private_commands] )) ||
+_starkli__signer__keystore__inspect-private_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore inspect-private commands' commands "$@"
+}
+(( $+functions[_starkli__help__invoke_commands] )) ||
+_starkli__help__invoke_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help invoke commands' commands "$@"
+}
+(( $+functions[_starkli__invoke_commands] )) ||
+_starkli__invoke_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli invoke commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__keystore_commands] )) ||
+_starkli__help__signer__keystore_commands() {
+    local commands; commands=(
+'new:Randomly generate a new keystore' \
+'from-key:Create a keystore file from an existing private key' \
+'inspect:Check the public key of an existing keystore file' \
+'inspect-private:Check the private key of an existing keystore file' \
+    )
+    _describe -t commands 'starkli help signer keystore commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__keystore_commands] )) ||
+_starkli__signer__help__keystore_commands() {
+    local commands; commands=(
+'new:Randomly generate a new keystore' \
+'from-key:Create a keystore file from an existing private key' \
+'inspect:Check the public key of an existing keystore file' \
+'inspect-private:Check the private key of an existing keystore file' \
+    )
+    _describe -t commands 'starkli signer help keystore commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore_commands] )) ||
+_starkli__signer__keystore_commands() {
+    local commands; commands=(
+'new:Randomly generate a new keystore' \
+'from-key:Create a keystore file from an existing private key' \
+'inspect:Check the public key of an existing keystore file' \
+'inspect-private:Check the private key of an existing keystore file' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli signer keystore commands' commands "$@"
+}
+(( $+functions[_starkli__help__lab_commands] )) ||
+_starkli__help__lab_commands() {
+    local commands; commands=(
+'mine-udc-salt:Mine UDC contract deployment salt for specific address prefix and/or suffix' \
+    )
+    _describe -t commands 'starkli help lab commands' commands "$@"
+}
+(( $+functions[_starkli__lab_commands] )) ||
+_starkli__lab_commands() {
+    local commands; commands=(
+'mine-udc-salt:Mine UDC contract deployment salt for specific address prefix and/or suffix' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli lab commands' commands "$@"
+}
+(( $+functions[_starkli__help__lab__mine-udc-salt_commands] )) ||
+_starkli__help__lab__mine-udc-salt_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help lab mine-udc-salt commands' commands "$@"
+}
+(( $+functions[_starkli__lab__help__mine-udc-salt_commands] )) ||
+_starkli__lab__help__mine-udc-salt_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli lab help mine-udc-salt commands' commands "$@"
+}
+(( $+functions[_starkli__lab__mine-udc-salt_commands] )) ||
+_starkli__lab__mine-udc-salt_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli lab mine-udc-salt commands' commands "$@"
+}
+(( $+functions[_starkli__help__mont_commands] )) ||
+_starkli__help__mont_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help mont commands' commands "$@"
+}
+(( $+functions[_starkli__mont_commands] )) ||
+_starkli__mont_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli mont commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer__keystore__new_commands] )) ||
+_starkli__help__signer__keystore__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help signer keystore new commands' commands "$@"
+}
+(( $+functions[_starkli__signer__help__keystore__new_commands] )) ||
+_starkli__signer__help__keystore__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer help keystore new commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__help__new_commands] )) ||
+_starkli__signer__keystore__help__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore help new commands' commands "$@"
+}
+(( $+functions[_starkli__signer__keystore__new_commands] )) ||
+_starkli__signer__keystore__new_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli signer keystore new commands' commands "$@"
+}
+(( $+functions[_starkli__help__nonce_commands] )) ||
+_starkli__help__nonce_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help nonce commands' commands "$@"
+}
+(( $+functions[_starkli__nonce_commands] )) ||
+_starkli__nonce_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli nonce commands' commands "$@"
+}
+(( $+functions[_starkli__account__help__oz_commands] )) ||
+_starkli__account__help__oz_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli account help oz commands' commands "$@"
+}
+(( $+functions[_starkli__account__oz_commands] )) ||
+_starkli__account__oz_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli account oz commands' commands "$@"
+}
+(( $+functions[_starkli__help__account__oz_commands] )) ||
+_starkli__help__account__oz_commands() {
+    local commands; commands=(
+'init:Create a new account configuration without actually deploying' \
+    )
+    _describe -t commands 'starkli help account oz commands' commands "$@"
+}
+(( $+functions[_starkli__help__parse-cairo-string_commands] )) ||
+_starkli__help__parse-cairo-string_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help parse-cairo-string commands' commands "$@"
+}
+(( $+functions[_starkli__parse-cairo-string_commands] )) ||
+_starkli__parse-cairo-string_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli parse-cairo-string commands' commands "$@"
+}
+(( $+functions[_starkli__help__receipt_commands] )) ||
+_starkli__help__receipt_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help receipt commands' commands "$@"
+}
+(( $+functions[_starkli__receipt_commands] )) ||
+_starkli__receipt_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli receipt commands' commands "$@"
+}
+(( $+functions[_starkli__help__selector_commands] )) ||
+_starkli__help__selector_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help selector commands' commands "$@"
+}
+(( $+functions[_starkli__selector_commands] )) ||
+_starkli__selector_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli selector commands' commands "$@"
+}
+(( $+functions[_starkli__help__signer_commands] )) ||
+_starkli__help__signer_commands() {
+    local commands; commands=(
+'keystore:Keystore management commands' \
+'gen-keypair:Randomly generate a new key pair' \
+    )
+    _describe -t commands 'starkli help signer commands' commands "$@"
+}
+(( $+functions[_starkli__signer_commands] )) ||
+_starkli__signer_commands() {
+    local commands; commands=(
+'keystore:Keystore management commands' \
+'gen-keypair:Randomly generate a new key pair' \
+'help:Print this message or the help of the given subcommand(s)' \
+    )
+    _describe -t commands 'starkli signer commands' commands "$@"
+}
+(( $+functions[_starkli__help__spec-version_commands] )) ||
+_starkli__help__spec-version_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help spec-version commands' commands "$@"
+}
+(( $+functions[_starkli__spec-version_commands] )) ||
+_starkli__spec-version_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli spec-version commands' commands "$@"
+}
+(( $+functions[_starkli__help__state-update_commands] )) ||
+_starkli__help__state-update_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help state-update commands' commands "$@"
+}
+(( $+functions[_starkli__state-update_commands] )) ||
+_starkli__state-update_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli state-update commands' commands "$@"
+}
+(( $+functions[_starkli__help__status_commands] )) ||
+_starkli__help__status_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help status commands' commands "$@"
+}
+(( $+functions[_starkli__status_commands] )) ||
+_starkli__status_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli status commands' commands "$@"
+}
+(( $+functions[_starkli__help__storage_commands] )) ||
+_starkli__help__storage_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help storage commands' commands "$@"
+}
+(( $+functions[_starkli__storage_commands] )) ||
+_starkli__storage_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli storage commands' commands "$@"
+}
+(( $+functions[_starkli__help__syncing_commands] )) ||
+_starkli__help__syncing_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help syncing commands' commands "$@"
+}
+(( $+functions[_starkli__syncing_commands] )) ||
+_starkli__syncing_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli syncing commands' commands "$@"
+}
+(( $+functions[_starkli__help__to-cairo-string_commands] )) ||
+_starkli__help__to-cairo-string_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help to-cairo-string commands' commands "$@"
+}
+(( $+functions[_starkli__to-cairo-string_commands] )) ||
+_starkli__to-cairo-string_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli to-cairo-string commands' commands "$@"
+}
+(( $+functions[_starkli__help__trace_commands] )) ||
+_starkli__help__trace_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help trace commands' commands "$@"
+}
+(( $+functions[_starkli__trace_commands] )) ||
+_starkli__trace_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli trace commands' commands "$@"
+}
+(( $+functions[_starkli__help__transaction_commands] )) ||
+_starkli__help__transaction_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli help transaction commands' commands "$@"
+}
+(( $+functions[_starkli__transaction_commands] )) ||
+_starkli__transaction_commands() {
+    local commands; commands=()
+    _describe -t commands 'starkli transaction commands' commands "$@"
+}
+
+if [ "$funcstack[1]" = "_starkli" ]; then
+    _starkli "$@"
+else
+    compdef _starkli starkli
+fi

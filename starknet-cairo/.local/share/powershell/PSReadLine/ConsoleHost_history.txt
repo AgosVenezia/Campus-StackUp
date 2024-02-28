@@ -1,0 +1,2 @@
+cd F:/Descargas/Cursos/VSC_PROYECTOS/StackUpCampus
+cd desktop

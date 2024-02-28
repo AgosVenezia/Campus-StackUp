@@ -1,0 +1,17 @@
+2024-02-23 14:18:57.570 [info] 
+
+
+
+
+2024-02-23 14:18:57.591 [info] Extension host agent started.
+2024-02-23 14:19:07.379 [info] [127.0.0.1][0d01fe90][ManagementConnection] New connection established.
+2024-02-23 14:19:07.409 [info] [127.0.0.1][6c2dd7c9][ExtensionHostConnection] New connection established.
+2024-02-23 14:19:09.209 [info] Installing extensions...
+2024-02-23 14:19:10.746 [info] [127.0.0.1][6c2dd7c9][ExtensionHostConnection] <1821> Launched Extension Host Process.
+2024-02-23 14:19:11.660 [info] Updating the extension 'ms-ceintl.vscode-language-pack-es' to the version 1.87.0
+2024-02-23 14:19:11.661 [info] Installing extension 'ms-ceintl.vscode-language-pack-es'...
+2024-02-23 14:19:11.794 [info] Getting Manifest... ms-ceintl.vscode-language-pack-es
+2024-02-23 14:19:12.290 [info] Installing extension: ms-ceintl.vscode-language-pack-es
+2024-02-23 14:19:12.756 [info] Adding language packs from the extension ms-ceintl.vscode-language-pack-es
+2024-02-23 14:19:12.945 [info] Extension installed successfully: ms-ceintl.vscode-language-pack-es
+2024-02-23 14:19:12.946 [info] Extension 'ms-ceintl.vscode-language-pack-es' v1.83.0 was successfully installed.

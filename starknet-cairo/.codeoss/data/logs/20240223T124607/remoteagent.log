@@ -1,0 +1,22 @@
+2024-02-23 12:46:07.611 [info] 
+
+
+
+
+2024-02-23 12:46:07.611 [info] Extension host agent started.
+2024-02-23 12:46:07.638 [info] Started initializing default profile extensions in extensions installation folder. file:///home/agostina_cv/.codeoss/extensions
+2024-02-23 12:46:07.660 [info] Completed initializing default profile extensions in extensions installation folder. file:///home/agostina_cv/.codeoss/extensions
+2024-02-23 12:46:13.257 [info] [127.0.0.1][1cc9eb42][ManagementConnection] New connection established.
+2024-02-23 12:46:13.462 [info] [127.0.0.1][8746eaaf][ExtensionHostConnection] New connection established.
+2024-02-23 12:46:14.286 [info] Installing extensions...
+2024-02-23 12:46:15.358 [info] [127.0.0.1][8746eaaf][ExtensionHostConnection] <1111> Launched Extension Host Process.
+2024-02-23 12:46:17.243 [info] Installing extension 'ms-ceintl.vscode-language-pack-es'...
+2024-02-23 12:46:17.413 [info] Getting Manifest... ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:17.927 [info] Installing extension: ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:19.985 [info] Extension signature verification is not done: ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:20.127 [info] Extracted extension to file:///home/agostina_cv/.codeoss/extensions/ms-ceintl.vscode-language-pack-es-1.83.0-universal: ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:20.133 [info] Renamed to /home/agostina_cv/.codeoss/extensions/ms-ceintl.vscode-language-pack-es-1.83.0-universal
+2024-02-23 12:46:20.136 [info] Extracting extension completed. ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:20.142 [info] Adding language packs from the extension ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:20.283 [info] Extension installed successfully: ms-ceintl.vscode-language-pack-es
+2024-02-23 12:46:20.285 [info] Extension 'ms-ceintl.vscode-language-pack-es' v1.83.0 was successfully installed.

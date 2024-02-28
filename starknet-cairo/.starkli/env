@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Adds binary directory to PATH
+case ":${PATH}:" in
+  *:/home/agostina_cv/.starkli/bin:*)
+    ;;
+  *)
+    export PATH="/home/agostina_cv/.starkli/bin:$PATH"
+    ;;
+esac
+
+# Loads completions based on shell
+if [ -n "$ZSH_NAME" ]; then
+    fpath=(/home/agostina_cv/.starkli/share/zsh-completions $fpath)
+    autoload -U compinit
+    compinit
+else
+    case $SHELL in
+        */bash)
+            if [ -f "/home/agostina_cv/.starkli/share/bash-completions/starkli" ]; then
+                . /home/agostina_cv/.starkli/share/bash-completions/starkli
+            fi
+            ;;
+        */zsh)
+            fpath=(/home/agostina_cv/.starkli/share/zsh-completions $fpath)
+            autoload -U compinit
+            compinit
+            ;;
+    esac
+fi

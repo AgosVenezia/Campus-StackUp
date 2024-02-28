@@ -1,0 +1,19 @@
+2024-02-27 14:29:10.272 [info] 
+
+
+
+
+2024-02-27 14:29:10.272 [info] Extension host agent started.
+2024-02-27 14:29:17.353 [info] [127.0.0.1][96a6e3a5][ManagementConnection] New connection established.
+2024-02-27 14:29:17.396 [info] [127.0.0.1][5cf88091][ExtensionHostConnection] New connection established.
+2024-02-27 14:29:18.331 [info] Installing extensions...
+2024-02-27 14:29:18.495 [info] [127.0.0.1][5cf88091][ExtensionHostConnection] <1114> Launched Extension Host Process.
+2024-02-27 14:29:20.904 [info] Updating the extension 'ms-ceintl.vscode-language-pack-es' to the version 1.87.0
+2024-02-27 14:29:20.905 [info] Installing extension 'ms-ceintl.vscode-language-pack-es'...
+2024-02-27 14:29:21.053 [info] Getting Manifest... ms-ceintl.vscode-language-pack-es
+2024-02-27 14:29:21.607 [info] Installing extension: ms-ceintl.vscode-language-pack-es
+2024-02-27 14:29:21.957 [info] Adding language packs from the extension ms-ceintl.vscode-language-pack-es
+2024-02-27 14:29:22.055 [info] Extension installed successfully: ms-ceintl.vscode-language-pack-es
+2024-02-27 14:29:22.057 [info] Extension 'ms-ceintl.vscode-language-pack-es' v1.83.0 was successfully installed.
+2024-02-27 14:30:06.170 [info] [127.0.0.1][96a6e3a5][ManagementConnection] The client has disconnected gracefully, so the connection will be disposed.
+2024-02-27 14:30:06.407 [info] [127.0.0.1][5cf88091][ExtensionHostConnection] <1114> Extension Host Process exited with code: 0, signal: null.
