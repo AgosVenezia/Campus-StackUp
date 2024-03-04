@@ -12,7 +12,7 @@ namespace AElf.Contracts.MyCharacter {
 
   #region Events
   #endregion
-  internal static partial class MyCharacterContainer
+  public static partial class MyCharacterContainer
   {
     static readonly string __ServiceName = "MyCharacter";
 

@@ -12,7 +12,7 @@ using scg = global::System.Collections.Generic;
 namespace AElf.Contracts.MyCharacter {
 
   /// <summary>Holder for reflection information generated from Protobuf/stub/MyCharacter.proto</summary>
-  internal static partial class MyCharacterReflection {
+  public static partial class MyCharacterReflection {
 
     #region Descriptor
     /// <summary>File descriptor for Protobuf/stub/MyCharacter.proto</summary>
@@ -46,7 +46,7 @@ namespace AElf.Contracts.MyCharacter {
 
   }
   #region Messages
-  internal sealed partial class Character : pb::IMessage<Character>
+  public sealed partial class Character : pb::IMessage<Character>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
