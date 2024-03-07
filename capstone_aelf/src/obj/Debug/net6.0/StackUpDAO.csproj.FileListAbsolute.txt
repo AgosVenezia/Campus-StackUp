@@ -1,0 +1,13 @@
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\bin\Debug\net6.0\StackUpDAO.deps.json
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\bin\Debug\net6.0\StackUpDAO.dll
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\bin\Debug\net6.0\StackUpDAO.pdb
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.csproj.AssemblyReference.cache
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.GeneratedMSBuildEditorConfig.editorconfig
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.AssemblyInfoInputs.cache
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.AssemblyInfo.cs
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.csproj.CoreCompileInputs.cache
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.sourcelink.json
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.dll
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\refint\StackUpDAO.dll
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\StackUpDAO.pdb
+F:\Descargas\Cursos\VSC_PROYECTOS\StackUpCampus\capstone_aelf\src\obj\Debug\net6.0\ref\StackUpDAO.dll
