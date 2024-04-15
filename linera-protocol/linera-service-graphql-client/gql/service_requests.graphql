@@ -1,0 +1,229 @@
+query Chains {
+  chains {
+    list
+    default
+  }
+}
+
+query ChainOutbox($chainId: ChainId!, $target: Target!) {
+  chain(chainId: $chainId) {
+    outboxes {
+      entry(key: $target) {
+        key
+        value {
+          nextHeightToSchedule
+          queue {
+            entries
+          }
+        }
+      }
+    }
+  }
+}
+
+query ChainChannel($chainId: ChainId!, $channelFullName: ChannelFullName!) {
+  chain(chainId: $chainId) {
+    channels {
+      entry(key: $channelFullName) {
+        key
+        value {
+          subscribers
+          blockHeight
+        }
+      }
+    }
+  }
+}
+
+query ChainInbox($chainId: ChainId!, $origin: Origin!) {
+  chain(chainId: $chainId) {
+    inboxes {
+      entry(key: $origin) {
+        key
+        value {
+          nextCursorToAdd {
+            height
+            index
+          }
+          nextCursorToRemove {
+            height
+            index
+          }
+          addedEvents {
+            entries
+          }
+          removedEvents {
+            entries
+          }
+        }
+      }
+    }
+  }
+}
+
+query Chain(
+  $chainId: ChainId!,
+  $inboxesInput: MapInput_Origin,
+  $outboxesInput: MapInput_Target,
+  $channelsInput: MapInput_ChannelFullName,
+) {
+  chain(chainId: $chainId) {
+    chainId
+    executionState {
+      system {
+        description
+        epoch
+        adminId
+        subscriptions {
+          chainId
+          name
+        }
+        ownership
+        balance
+        timestamp
+      }
+    }
+    executionStateHash
+    tipState {
+      blockHash
+      nextBlockHeight
+    }
+    manager
+    confirmedLog {
+      entries
+    }
+    receivedLog {
+      entries {
+        chainId
+        height
+      }
+    }
+    inboxes {
+      keys
+      entries(input: $inboxesInput) {
+        key
+        value {
+          nextCursorToAdd {
+            height
+            index
+          }
+          nextCursorToRemove {
+            height
+            index
+          }
+          addedEvents { entries }
+          removedEvents { entries }
+        }
+      }
+    }
+    outboxes {
+      keys
+      entries(input: $outboxesInput) {
+        key
+        value {
+          nextHeightToSchedule
+          queue {
+            entries
+          }
+        }
+      }
+    }
+    outboxCounters
+    channels {
+      keys
+      entries(input: $channelsInput) {
+        key
+        value {
+          subscribers
+          blockHeight
+        }
+      }
+    }
+
+  }
+}
+
+query Applications($chainId: ChainId!) {
+  applications(chainId: $chainId) {
+    id
+    link
+    description
+  }
+}
+
+query Block($hash: CryptoHash, $chainId: ChainId!) {
+  block(hash: $hash, chainId: $chainId) {
+    hash
+    value {
+      status
+      executedBlock {
+        block {
+          chainId
+          epoch
+          height
+          timestamp
+          authenticatedSigner
+          previousBlockHash
+          incomingMessages {
+            origin
+            event
+            action
+          }
+          operations
+        }
+        messages {
+          destination
+          authenticatedSigner
+          grant
+          refundGrantTo
+          kind
+          message
+        }
+        messageCounts
+        stateHash
+      }
+    }
+  }
+}
+
+query Blocks($from: CryptoHash, $chainId: ChainId!, $limit: Int) {
+  blocks(from: $from, chainId: $chainId, limit: $limit) {
+    hash
+    value {
+      status
+      executedBlock {
+        block {
+          chainId
+          epoch
+          height
+          timestamp
+          authenticatedSigner
+          previousBlockHash
+          incomingMessages {
+            origin
+            event
+            action
+          }
+          operations
+        }
+        messages {
+          destination
+          authenticatedSigner
+          grant
+          refundGrantTo
+          kind
+          message
+        }
+        stateHash
+      }
+    }
+  }
+}
+
+subscription Notifications($chainId: ChainId!) {
+  notifications(chainId: $chainId)
+}
+
+mutation Transfer($chainId: ChainId!, $recipient: ChainId!, $amount: Amount!) {
+  transfer(chainId: $chainId, recipient: { Account: { chain_id: $recipient } }, amount: $amount)
+}

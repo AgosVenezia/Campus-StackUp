@@ -1,0 +1,1 @@
+handle-query: func(argument: list<u8>) -> result<list<u8>, string>

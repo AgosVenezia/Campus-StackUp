@@ -1,0 +1,16 @@
+[package]
+name = "linera-sdk-wasm-tests"
+version = "0.10.1"
+authors = ["Linera <contact@linera.io>"]
+edition = "2021"
+
+[dev-dependencies]
+async-trait.workspace = true
+bcs.workspace = true
+futures.workspace = true
+linera-sdk = { workspace = true, features = ["test"] }
+linera-views.workspace = true
+log.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+webassembly-test.workspace = true

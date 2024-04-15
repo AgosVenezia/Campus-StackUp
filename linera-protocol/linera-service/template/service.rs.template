@@ -1,0 +1,46 @@
+#![cfg_attr(target_arch = "wasm32", no_main)]
+
+mod state;
+
+use self::state::Application;
+use linera_sdk::{{base::WithServiceAbi, Service, ServiceRuntime, ViewStateStorage}};
+use thiserror::Error;
+
+pub struct ApplicationService {{
+    state: Application,
+    runtime: ServiceRuntime<Self>,
+}}
+
+linera_sdk::service!(ApplicationService);
+
+impl WithServiceAbi for ApplicationService {{
+    type Abi = {project_name}::ApplicationAbi;
+}}
+
+impl Service for ApplicationService {{
+    type Error = ServiceError;
+    type Storage = ViewStateStorage<Self>;
+    type State = Application;
+
+    async fn new(state: Self::State, runtime: ServiceRuntime<Self>) -> Result<Self, Self::Error> {{
+        Ok(ApplicationService {{ state, runtime }})
+    }}
+
+    async fn handle_query(&self, _query: Self::Query) -> Result<(), Self::Error> {{
+        Err(ServiceError::QueriesNotSupported)
+    }}
+}}
+
+/// An error that can occur while querying the service.
+#[derive(Debug, Error)]
+pub enum ServiceError {{
+    /// Query not supported by the application.
+    #[error("Queries not supported by application")]
+    QueriesNotSupported,
+
+    /// Invalid query argument; could not deserialize request.
+    #[error("Invalid query argument; could not deserialize request")]
+    InvalidQuery(#[from] serde_json::Error),
+
+    // Add error variants here.
+}}

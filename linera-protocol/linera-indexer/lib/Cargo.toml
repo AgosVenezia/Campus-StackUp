@@ -1,0 +1,42 @@
+[package]
+name = "linera-indexer"
+version = "0.10.1"
+description = "Indexer for Linera protocol."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.io"
+documentation = "https://docs.rs/linera-indexer/latest/linera_indexer/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["rocksdb"]
+benchmark = ["linera-base/test"]
+rocksdb = ["linera-views/rocksdb", "linera-core/rocksdb"]
+aws = ["linera-views/dynamodb", "linera-core/aws"]
+scylladb = ["linera-views/scylladb", "linera-core/scylladb"]
+
+[dependencies]
+async-graphql.workspace = true
+async-graphql-axum.workspace = true
+async-trait.workspace = true
+async-tungstenite = { version = "0.22", features = ["tokio-runtime"] }
+axum = { workspace = true, features = ["ws"] }
+bcs.workspace = true
+clap.workspace = true
+futures.workspace = true
+graphql-ws-client = { version = "0.5", features = ["client-graphql-client"] }
+graphql_client = { version = "0.13", features = [ "reqwest-rustls" ] }
+hyper = "0.14"
+linera-base.workspace = true
+linera-chain.workspace = true
+linera-core.workspace = true
+linera-service-graphql-client.workspace = true
+linera-version.workspace = true
+linera-views.workspace = true
+reqwest.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+tower-http = { workspace = true, features = ["cors"] }
+tracing.workspace = true

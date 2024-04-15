@@ -1,0 +1,53 @@
+[package]
+name = "linera-storage-service"
+version = "0.10.1"
+description = "RPC shared key value store."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-storage-service/latest/linera_storage_service/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+default = ["rocksdb"]
+rocksdb = ["linera-views/rocksdb"]
+aws = ["linera-views/dynamodb"]
+scylladb = ["linera-views/scylladb"]
+test = ["linera-views/test"]
+
+[[bin]]
+name = "storage_service_server"
+path = "src/server.rs"
+
+[dependencies]
+anyhow.workspace = true
+async-lock.workspace = true
+async-trait.workspace = true
+bcs.workspace = true
+clap.workspace = true
+linera-base.workspace = true
+linera-version.workspace = true
+linera-views.workspace = true
+port-selector.workspace = true
+prost.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["full"] }
+tonic = { workspace = true, features = ["codegen", "prost", "transport"] }
+
+[dev-dependencies]
+linera-storage-service = { path = ".", features = ["test"] }
+proptest = { workspace = true, features = ["alloc"] }
+serde-reflection.workspace = true
+serde_yaml.workspace = true
+similar-asserts.workspace = true
+test-strategy.workspace = true
+
+[build-dependencies]
+cfg_aliases.workspace = true
+tonic-build = { workspace = true, features = ["prost", "transport"] }
+
+[package.metadata.cargo-machete]
+ignored = ["proptest", "prost"]

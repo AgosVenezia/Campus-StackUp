@@ -1,0 +1,955 @@
+---
+source: linera-rpc/tests/format.rs
+expression: get_registry().unwrap()
+---
+Account:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - owner:
+        OPTION:
+          TYPENAME: Owner
+AdminOperation:
+  ENUM:
+    0:
+      CreateCommittee:
+        STRUCT:
+          - epoch:
+              TYPENAME: Epoch
+          - committee:
+              TYPENAME: Committee
+    1:
+      RemoveCommittee:
+        STRUCT:
+          - epoch:
+              TYPENAME: Epoch
+Amount:
+  NEWTYPESTRUCT: U128
+ApplicationId:
+  STRUCT:
+    - bytecode_id:
+        TYPENAME: BytecodeId
+    - creation:
+        TYPENAME: MessageId
+ApplicationPermissions:
+  STRUCT:
+    - execute_operations:
+        OPTION:
+          SEQ:
+            TYPENAME: ApplicationId
+    - close_chain:
+        SEQ:
+          TYPENAME: ApplicationId
+Block:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - epoch:
+        TYPENAME: Epoch
+    - incoming_messages:
+        SEQ:
+          TYPENAME: IncomingMessage
+    - operations:
+        SEQ:
+          TYPENAME: Operation
+    - height:
+        TYPENAME: BlockHeight
+    - timestamp:
+        TYPENAME: Timestamp
+    - authenticated_signer:
+        OPTION:
+          TYPENAME: Owner
+    - previous_block_hash:
+        OPTION:
+          TYPENAME: CryptoHash
+BlockAndRound:
+  STRUCT:
+    - block:
+        TYPENAME: Block
+    - round:
+        TYPENAME: Round
+BlockHeight:
+  NEWTYPESTRUCT: U64
+BlockHeightRange:
+  STRUCT:
+    - start:
+        TYPENAME: BlockHeight
+    - limit:
+        OPTION: U64
+BlockProposal:
+  STRUCT:
+    - content:
+        TYPENAME: BlockAndRound
+    - owner:
+        TYPENAME: Owner
+    - signature:
+        TYPENAME: Signature
+    - blobs:
+        SEQ:
+          TYPENAME: CertificateValue
+    - validated:
+        OPTION:
+          TYPENAME: Certificate
+Bytecode:
+  STRUCT:
+    - bytes: BYTES
+BytecodeId:
+  STRUCT:
+    - message_id:
+        TYPENAME: MessageId
+BytecodeLocation:
+  STRUCT:
+    - certificate_hash:
+        TYPENAME: CryptoHash
+    - operation_index: U32
+Certificate:
+  STRUCT:
+    - value:
+        TYPENAME: CertificateValue
+    - round:
+        TYPENAME: Round
+    - signatures:
+        SEQ:
+          TUPLE:
+            - TYPENAME: ValidatorName
+            - TYPENAME: Signature
+CertificateValue:
+  ENUM:
+    0:
+      ValidatedBlock:
+        STRUCT:
+          - executed_block:
+              TYPENAME: ExecutedBlock
+    1:
+      ConfirmedBlock:
+        STRUCT:
+          - executed_block:
+              TYPENAME: ExecutedBlock
+    2:
+      LeaderTimeout:
+        STRUCT:
+          - chain_id:
+              TYPENAME: ChainId
+          - height:
+              TYPENAME: BlockHeight
+          - epoch:
+              TYPENAME: Epoch
+ChainAndHeight:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - height:
+        TYPENAME: BlockHeight
+ChainDescription:
+  ENUM:
+    0:
+      Root:
+        NEWTYPE: U32
+    1:
+      Child:
+        NEWTYPE:
+          TYPENAME: MessageId
+ChainId:
+  NEWTYPESTRUCT:
+    TYPENAME: CryptoHash
+ChainInfo:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - epoch:
+        OPTION:
+          TYPENAME: Epoch
+    - description:
+        OPTION:
+          TYPENAME: ChainDescription
+    - manager:
+        TYPENAME: ChainManagerInfo
+    - chain_balance:
+        TYPENAME: Amount
+    - block_hash:
+        OPTION:
+          TYPENAME: CryptoHash
+    - timestamp:
+        TYPENAME: Timestamp
+    - next_block_height:
+        TYPENAME: BlockHeight
+    - state_hash:
+        OPTION:
+          TYPENAME: CryptoHash
+    - requested_owner_balance:
+        OPTION:
+          TYPENAME: Amount
+    - requested_committees:
+        OPTION:
+          MAP:
+            KEY:
+              TYPENAME: Epoch
+            VALUE:
+              TYPENAME: Committee
+    - requested_pending_messages:
+        SEQ:
+          TYPENAME: IncomingMessage
+    - requested_sent_certificates:
+        SEQ:
+          TYPENAME: Certificate
+    - count_received_log: U64
+    - requested_received_log:
+        SEQ:
+          TYPENAME: ChainAndHeight
+    - requested_blob:
+        OPTION:
+          TYPENAME: CertificateValue
+ChainInfoQuery:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - test_next_block_height:
+        OPTION:
+          TYPENAME: BlockHeight
+    - request_owner_balance:
+        OPTION:
+          TYPENAME: Owner
+    - request_committees: BOOL
+    - request_pending_messages: BOOL
+    - request_sent_certificates_in_range:
+        OPTION:
+          TYPENAME: BlockHeightRange
+    - request_received_log_excluding_first_nth:
+        OPTION: U64
+    - request_manager_values: BOOL
+    - request_leader_timeout: BOOL
+    - request_blob:
+        OPTION:
+          TYPENAME: CryptoHash
+ChainInfoResponse:
+  STRUCT:
+    - info:
+        TYPENAME: ChainInfo
+    - signature:
+        OPTION:
+          TYPENAME: Signature
+ChainManagerInfo:
+  STRUCT:
+    - ownership:
+        TYPENAME: ChainOwnership
+    - requested_proposed:
+        OPTION:
+          TYPENAME: BlockProposal
+    - requested_locked:
+        OPTION:
+          TYPENAME: Certificate
+    - leader_timeout:
+        OPTION:
+          TYPENAME: Certificate
+    - pending:
+        OPTION:
+          TYPENAME: LiteVote
+    - timeout_vote:
+        OPTION:
+          TYPENAME: LiteVote
+    - requested_pending_value:
+        OPTION:
+          TYPENAME: CertificateValue
+    - current_round:
+        TYPENAME: Round
+    - leader:
+        OPTION:
+          TYPENAME: Owner
+    - round_timeout:
+        OPTION:
+          TYPENAME: Timestamp
+ChainOwnership:
+  STRUCT:
+    - super_owners:
+        MAP:
+          KEY:
+            TYPENAME: Owner
+          VALUE:
+            TYPENAME: PublicKey
+    - owners:
+        MAP:
+          KEY:
+            TYPENAME: Owner
+          VALUE:
+            TUPLE:
+              - TYPENAME: PublicKey
+              - U64
+    - multi_leader_rounds: U32
+    - timeout_config:
+        TYPENAME: TimeoutConfig
+ChannelFullName:
+  STRUCT:
+    - application_id:
+        TYPENAME: GenericApplicationId
+    - name:
+        TYPENAME: ChannelName
+ChannelName:
+  NEWTYPESTRUCT: BYTES
+ChannelSubscription:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - name:
+        TYPENAME: ChannelName
+Committee:
+  STRUCT:
+    - validators:
+        MAP:
+          KEY:
+            TYPENAME: ValidatorName
+          VALUE:
+            TYPENAME: ValidatorState
+    - policy:
+        TYPENAME: ResourceControlPolicy
+CrateVersion:
+  STRUCT:
+    - major: U32
+    - minor: U32
+    - patch: U32
+CrossChainRequest:
+  ENUM:
+    0:
+      UpdateRecipient:
+        STRUCT:
+          - sender:
+              TYPENAME: ChainId
+          - recipient:
+              TYPENAME: ChainId
+          - bundle_vecs:
+              SEQ:
+                TUPLE:
+                  - TYPENAME: Medium
+                  - SEQ:
+                      TYPENAME: MessageBundle
+    1:
+      ConfirmUpdatedRecipient:
+        STRUCT:
+          - sender:
+              TYPENAME: ChainId
+          - recipient:
+              TYPENAME: ChainId
+          - latest_heights:
+              SEQ:
+                TUPLE:
+                  - TYPENAME: Medium
+                  - TYPENAME: BlockHeight
+CryptoHash:
+  NEWTYPESTRUCT:
+    TUPLEARRAY:
+      CONTENT: U8
+      SIZE: 32
+Destination:
+  ENUM:
+    0:
+      Recipient:
+        NEWTYPE:
+          TYPENAME: ChainId
+    1:
+      Subscribers:
+        NEWTYPE:
+          TYPENAME: ChannelName
+Duration:
+  STRUCT:
+    - secs: U64
+    - nanos: U32
+Epoch:
+  NEWTYPESTRUCT: U32
+Event:
+  STRUCT:
+    - certificate_hash:
+        TYPENAME: CryptoHash
+    - height:
+        TYPENAME: BlockHeight
+    - index: U32
+    - authenticated_signer:
+        OPTION:
+          TYPENAME: Owner
+    - grant:
+        TYPENAME: Amount
+    - refund_grant_to:
+        OPTION:
+          TYPENAME: Account
+    - kind:
+        TYPENAME: MessageKind
+    - timestamp:
+        TYPENAME: Timestamp
+    - message:
+        TYPENAME: Message
+ExecutedBlock:
+  STRUCT:
+    - block:
+        TYPENAME: Block
+    - messages:
+        SEQ:
+          TYPENAME: OutgoingMessage
+    - message_counts:
+        SEQ: U32
+    - state_hash:
+        TYPENAME: CryptoHash
+GenericApplicationId:
+  ENUM:
+    0:
+      System: UNIT
+    1:
+      User:
+        NEWTYPE:
+          TYPENAME: ApplicationId
+HandleCertificateRequest:
+  STRUCT:
+    - certificate:
+        TYPENAME: Certificate
+    - wait_for_outgoing_messages: BOOL
+    - blobs:
+        SEQ:
+          TYPENAME: CertificateValue
+HandleLiteCertificateRequest:
+  STRUCT:
+    - certificate:
+        TYPENAME: LiteCertificate
+    - wait_for_outgoing_messages: BOOL
+IncomingMessage:
+  STRUCT:
+    - origin:
+        TYPENAME: Origin
+    - event:
+        TYPENAME: Event
+    - action:
+        TYPENAME: MessageAction
+LiteCertificate:
+  STRUCT:
+    - value:
+        TYPENAME: LiteValue
+    - round:
+        TYPENAME: Round
+    - signatures:
+        SEQ:
+          TUPLE:
+            - TYPENAME: ValidatorName
+            - TYPENAME: Signature
+LiteValue:
+  STRUCT:
+    - value_hash:
+        TYPENAME: CryptoHash
+    - chain_id:
+        TYPENAME: ChainId
+LiteVote:
+  STRUCT:
+    - value:
+        TYPENAME: LiteValue
+    - round:
+        TYPENAME: Round
+    - validator:
+        TYPENAME: ValidatorName
+    - signature:
+        TYPENAME: Signature
+Medium:
+  ENUM:
+    0:
+      Direct: UNIT
+    1:
+      Channel:
+        NEWTYPE:
+          TYPENAME: ChannelFullName
+Message:
+  ENUM:
+    0:
+      System:
+        NEWTYPE:
+          TYPENAME: SystemMessage
+    1:
+      User:
+        STRUCT:
+          - application_id:
+              TYPENAME: ApplicationId
+          - bytes: BYTES
+MessageAction:
+  ENUM:
+    0:
+      Accept: UNIT
+    1:
+      Reject: UNIT
+MessageBundle:
+  STRUCT:
+    - height:
+        TYPENAME: BlockHeight
+    - epoch:
+        TYPENAME: Epoch
+    - timestamp:
+        TYPENAME: Timestamp
+    - hash:
+        TYPENAME: CryptoHash
+    - messages:
+        SEQ:
+          TUPLE:
+            - U32
+            - TYPENAME: OutgoingMessage
+MessageId:
+  STRUCT:
+    - chain_id:
+        TYPENAME: ChainId
+    - height:
+        TYPENAME: BlockHeight
+    - index: U32
+MessageKind:
+  ENUM:
+    0:
+      Simple: UNIT
+    1:
+      Protected: UNIT
+    2:
+      Tracked: UNIT
+    3:
+      Bouncing: UNIT
+NodeError:
+  ENUM:
+    0:
+      CryptoError:
+        STRUCT:
+          - error: STR
+    1:
+      ArithmeticError:
+        STRUCT:
+          - error: STR
+    2:
+      ViewError:
+        STRUCT:
+          - error: STR
+    3:
+      ChainError:
+        STRUCT:
+          - error: STR
+    4:
+      WorkerError:
+        STRUCT:
+          - error: STR
+    5:
+      InactiveChain:
+        NEWTYPE:
+          TYPENAME: ChainId
+    6:
+      MissingCrossChainUpdate:
+        STRUCT:
+          - chain_id:
+              TYPENAME: ChainId
+          - origin:
+              TYPENAME: Origin
+          - height:
+              TYPENAME: BlockHeight
+    7:
+      ApplicationBytecodesNotFound:
+        NEWTYPE:
+          SEQ:
+            TYPENAME: BytecodeLocation
+    8:
+      MissingCertificateValue: UNIT
+    9:
+      MissingVoteInValidatorResponse: UNIT
+    10:
+      InactiveLocalChain:
+        NEWTYPE:
+          TYPENAME: ChainId
+    11:
+      InvalidChainInfoResponse: UNIT
+    12:
+      InvalidDecoding: UNIT
+    13:
+      UnexpectedMessage: UNIT
+    14:
+      GrpcError:
+        STRUCT:
+          - error: STR
+    15:
+      ClientIoError:
+        STRUCT:
+          - error: STR
+    16:
+      CannotResolveValidatorAddress:
+        STRUCT:
+          - address: STR
+    17:
+      SubscriptionError:
+        STRUCT:
+          - transport: STR
+    18:
+      SubscriptionFailed:
+        STRUCT:
+          - status: STR
+    19:
+      LocalNodeQuery:
+        STRUCT:
+          - error: STR
+OpenChainConfig:
+  STRUCT:
+    - ownership:
+        TYPENAME: ChainOwnership
+    - admin_id:
+        TYPENAME: ChainId
+    - epoch:
+        TYPENAME: Epoch
+    - committees:
+        MAP:
+          KEY:
+            TYPENAME: Epoch
+          VALUE:
+            TYPENAME: Committee
+    - balance:
+        TYPENAME: Amount
+    - application_permissions:
+        TYPENAME: ApplicationPermissions
+Operation:
+  ENUM:
+    0:
+      System:
+        NEWTYPE:
+          TYPENAME: SystemOperation
+    1:
+      User:
+        STRUCT:
+          - application_id:
+              TYPENAME: ApplicationId
+          - bytes: BYTES
+Origin:
+  STRUCT:
+    - sender:
+        TYPENAME: ChainId
+    - medium:
+        TYPENAME: Medium
+OutgoingMessage:
+  STRUCT:
+    - destination:
+        TYPENAME: Destination
+    - authenticated_signer:
+        OPTION:
+          TYPENAME: Owner
+    - grant:
+        TYPENAME: Amount
+    - refund_grant_to:
+        OPTION:
+          TYPENAME: Account
+    - kind:
+        TYPENAME: MessageKind
+    - message:
+        TYPENAME: Message
+Owner:
+  NEWTYPESTRUCT:
+    TYPENAME: CryptoHash
+PublicKey:
+  NEWTYPESTRUCT:
+    TUPLEARRAY:
+      CONTENT: U8
+      SIZE: 32
+Recipient:
+  ENUM:
+    0:
+      Burn: UNIT
+    1:
+      Account:
+        NEWTYPE:
+          TYPENAME: Account
+ResourceControlPolicy:
+  STRUCT:
+    - block:
+        TYPENAME: Amount
+    - fuel_unit:
+        TYPENAME: Amount
+    - read_operation:
+        TYPENAME: Amount
+    - write_operation:
+        TYPENAME: Amount
+    - byte_read:
+        TYPENAME: Amount
+    - byte_written:
+        TYPENAME: Amount
+    - byte_stored:
+        TYPENAME: Amount
+    - operation:
+        TYPENAME: Amount
+    - operation_byte:
+        TYPENAME: Amount
+    - message:
+        TYPENAME: Amount
+    - message_byte:
+        TYPENAME: Amount
+    - maximum_bytes_read_per_block: U64
+    - maximum_bytes_written_per_block: U64
+Round:
+  ENUM:
+    0:
+      Fast: UNIT
+    1:
+      MultiLeader:
+        NEWTYPE: U32
+    2:
+      SingleLeader:
+        NEWTYPE: U32
+RpcMessage:
+  ENUM:
+    0:
+      BlockProposal:
+        NEWTYPE:
+          TYPENAME: BlockProposal
+    1:
+      Certificate:
+        NEWTYPE:
+          TYPENAME: HandleCertificateRequest
+    2:
+      LiteCertificate:
+        NEWTYPE:
+          TYPENAME: HandleLiteCertificateRequest
+    3:
+      ChainInfoQuery:
+        NEWTYPE:
+          TYPENAME: ChainInfoQuery
+    4:
+      VersionInfoQuery: UNIT
+    5:
+      Vote:
+        NEWTYPE:
+          TYPENAME: LiteVote
+    6:
+      ChainInfoResponse:
+        NEWTYPE:
+          TYPENAME: ChainInfoResponse
+    7:
+      Error:
+        NEWTYPE:
+          TYPENAME: NodeError
+    8:
+      VersionInfoResponse:
+        NEWTYPE:
+          TYPENAME: VersionInfo
+    9:
+      CrossChainRequest:
+        NEWTYPE:
+          TYPENAME: CrossChainRequest
+Signature:
+  NEWTYPESTRUCT:
+    TUPLEARRAY:
+      CONTENT: U8
+      SIZE: 64
+SystemChannel:
+  ENUM:
+    0:
+      Admin: UNIT
+    1:
+      PublishedBytecodes: UNIT
+SystemMessage:
+  ENUM:
+    0:
+      Credit:
+        STRUCT:
+          - target:
+              OPTION:
+                TYPENAME: Owner
+          - amount:
+              TYPENAME: Amount
+          - source:
+              OPTION:
+                TYPENAME: Owner
+    1:
+      Withdraw:
+        STRUCT:
+          - owner:
+              TYPENAME: Owner
+          - amount:
+              TYPENAME: Amount
+          - recipient:
+              TYPENAME: Recipient
+          - user_data:
+              TYPENAME: UserData
+    2:
+      OpenChain:
+        NEWTYPE:
+          TYPENAME: OpenChainConfig
+    3:
+      SetCommittees:
+        STRUCT:
+          - epoch:
+              TYPENAME: Epoch
+          - committees:
+              MAP:
+                KEY:
+                  TYPENAME: Epoch
+                VALUE:
+                  TYPENAME: Committee
+    4:
+      Subscribe:
+        STRUCT:
+          - id:
+              TYPENAME: ChainId
+          - subscription:
+              TYPENAME: ChannelSubscription
+    5:
+      Unsubscribe:
+        STRUCT:
+          - id:
+              TYPENAME: ChainId
+          - subscription:
+              TYPENAME: ChannelSubscription
+    6:
+      BytecodePublished:
+        STRUCT:
+          - operation_index: U32
+    7:
+      ApplicationCreated: UNIT
+    8:
+      BytecodeLocations:
+        STRUCT:
+          - locations:
+              SEQ:
+                TUPLE:
+                  - TYPENAME: BytecodeId
+                  - TYPENAME: BytecodeLocation
+    9:
+      RegisterApplications:
+        STRUCT:
+          - applications:
+              SEQ:
+                TYPENAME: UserApplicationDescription
+    10:
+      Notify:
+        STRUCT:
+          - id:
+              TYPENAME: ChainId
+    11:
+      RequestApplication:
+        NEWTYPE:
+          TYPENAME: ApplicationId
+SystemOperation:
+  ENUM:
+    0:
+      Transfer:
+        STRUCT:
+          - owner:
+              OPTION:
+                TYPENAME: Owner
+          - recipient:
+              TYPENAME: Recipient
+          - amount:
+              TYPENAME: Amount
+          - user_data:
+              TYPENAME: UserData
+    1:
+      Claim:
+        STRUCT:
+          - owner:
+              TYPENAME: Owner
+          - target_id:
+              TYPENAME: ChainId
+          - recipient:
+              TYPENAME: Recipient
+          - amount:
+              TYPENAME: Amount
+          - user_data:
+              TYPENAME: UserData
+    2:
+      OpenChain:
+        NEWTYPE:
+          TYPENAME: OpenChainConfig
+    3:
+      CloseChain: UNIT
+    4:
+      ChangeOwnership:
+        STRUCT:
+          - super_owners:
+              SEQ:
+                TYPENAME: PublicKey
+          - owners:
+              SEQ:
+                TUPLE:
+                  - TYPENAME: PublicKey
+                  - U64
+          - multi_leader_rounds: U32
+          - timeout_config:
+              TYPENAME: TimeoutConfig
+    5:
+      ChangeApplicationPermissions:
+        NEWTYPE:
+          TYPENAME: ApplicationPermissions
+    6:
+      Subscribe:
+        STRUCT:
+          - chain_id:
+              TYPENAME: ChainId
+          - channel:
+              TYPENAME: SystemChannel
+    7:
+      Unsubscribe:
+        STRUCT:
+          - chain_id:
+              TYPENAME: ChainId
+          - channel:
+              TYPENAME: SystemChannel
+    8:
+      PublishBytecode:
+        STRUCT:
+          - contract:
+              TYPENAME: Bytecode
+          - service:
+              TYPENAME: Bytecode
+    9:
+      CreateApplication:
+        STRUCT:
+          - bytecode_id:
+              TYPENAME: BytecodeId
+          - parameters: BYTES
+          - initialization_argument: BYTES
+          - required_application_ids:
+              SEQ:
+                TYPENAME: ApplicationId
+    10:
+      RequestApplication:
+        STRUCT:
+          - chain_id:
+              TYPENAME: ChainId
+          - application_id:
+              TYPENAME: ApplicationId
+    11:
+      Admin:
+        NEWTYPE:
+          TYPENAME: AdminOperation
+TimeoutConfig:
+  STRUCT:
+    - fast_round_duration:
+        OPTION:
+          TYPENAME: Duration
+    - base_timeout:
+        TYPENAME: Duration
+    - timeout_increment:
+        TYPENAME: Duration
+Timestamp:
+  NEWTYPESTRUCT: U64
+UserApplicationDescription:
+  STRUCT:
+    - bytecode_id:
+        TYPENAME: BytecodeId
+    - bytecode_location:
+        TYPENAME: BytecodeLocation
+    - creation:
+        TYPENAME: MessageId
+    - parameters: BYTES
+    - required_application_ids:
+        SEQ:
+          TYPENAME: ApplicationId
+UserData:
+  NEWTYPESTRUCT:
+    OPTION:
+      TUPLEARRAY:
+        CONTENT: U8
+        SIZE: 32
+ValidatorName:
+  NEWTYPESTRUCT:
+    TYPENAME: PublicKey
+ValidatorState:
+  STRUCT:
+    - network_address: STR
+    - votes: U64
+VersionInfo:
+  STRUCT:
+    - crate_version:
+        TYPENAME: CrateVersion
+    - git_commit: STR
+    - git_dirty: BOOL
+    - rpc_hash: STR
+    - graphql_hash: STR
+    - wit_hash: STR

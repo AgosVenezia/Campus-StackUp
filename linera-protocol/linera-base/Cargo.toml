@@ -1,0 +1,53 @@
+[package]
+name = "linera-base"
+version = "0.10.1"
+description = "Base definitions, including cryptography, used by the Linera protocol."
+authors = ["Linera <contact@linera.io>"]
+readme = "README.md"
+repository = "https://github.com/linera-io/linera-protocol"
+homepage = "https://linera.dev"
+documentation = "https://docs.rs/linera-base/latest/linera_base/"
+license = "Apache-2.0"
+edition = "2021"
+
+[features]
+test = ["test-strategy", "proptest"]
+metrics = ["prometheus"]
+web = ["getrandom/js", "rand/getrandom", "rand/std", "rand/std_rng"]
+
+[dependencies]
+anyhow.workspace = true
+async-graphql.workspace = true
+async-trait.workspace = true
+bcs.workspace = true
+chrono.workspace = true
+ed25519-dalek.workspace = true
+generic-array.workspace = true
+getrandom = { workspace = true, optional = true }
+hex.workspace = true
+prometheus = { workspace = true, optional = true }
+proptest = { workspace = true, optional = true, features = ["alloc"] }
+rand.workspace = true
+serde.workspace = true
+serde-name.workspace = true
+serde_bytes.workspace = true
+sha3.workspace = true
+test-strategy = { workspace = true, optional = true }
+thiserror.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+chrono.workspace = true
+rand = { workspace = true, features = ["getrandom", "std", "std_rng"] }
+tokio = { workspace = true, features = ["process", "rt-multi-thread"] }
+tracing.workspace = true
+prometheus.workspace = true
+
+[dev-dependencies]
+custom_debug_derive.workspace = true
+linera-base = { path = ".", features = ["test"] }
+
+[build-dependencies]
+cfg_aliases.workspace = true
+
+[package.metadata.cargo-machete]
+ignored = ["getrandom", "serde_bytes"]
