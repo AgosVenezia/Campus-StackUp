@@ -5,27 +5,22 @@
 
 mod state;
 
-use std::str::FromStr;
-
-use async_trait::async_trait;
-use fungible::{Account, FungibleResponse, FungibleTokenAbi, Message, Operation};
-use linera_sdk::{
-    base::{AccountOwner, Amount, WithContractAbi},
-    ensure, Contract, ContractRuntime, ViewStateStorage,
-};
-use thiserror::Error;
-
 use self::state::FungibleToken;
-
-pub struct FungibleTokenContract {
-    state: FungibleToken,
-    runtime: ContractRuntime<Self>,
-}
+use async_trait::async_trait;
+use fungible::{Account, Message, Operation};
+use linera_sdk::base::{Amount, Owner};
+use linera_sdk::{base::WithContractAbi, Contract, ContractRuntime, ViewStateStorage};
+use thiserror::Error;
 
 linera_sdk::contract!(FungibleTokenContract);
 
 impl WithContractAbi for FungibleTokenContract {
-    type Abi = FungibleTokenAbi;
+    type Abi = fungible::FungibleAbi;
+}
+
+pub struct FungibleTokenContract {
+    state: FungibleToken,
+    runtime: ContractRuntime<Self>,
 }
 
 #[async_trait]
@@ -46,42 +41,26 @@ impl Contract for FungibleTokenContract {
         &mut self.state
     }
 
+    // INSERT fn initialize CODE HERE
     async fn initialize(
         &mut self,
-        mut state: Self::InitializationArgument,
+        amount: Self::InitializationArgument,
     ) -> Result<(), Self::Error> {
         // Validate that the application parameters were configured correctly.
         let _ = self.runtime.application_parameters();
 
-        // If initial accounts are empty, creator gets 1M tokens to act like a faucet.
-        if state.accounts.is_empty() {
-            if let Some(owner) = self.runtime.authenticated_signer() {
-                state.accounts.insert(
-                    AccountOwner::User(owner),
-                    Amount::from_str("1000000").unwrap(),
-                );
-            }
+        if let Some(owner) = self.runtime.authenticated_signer() {
+            self.state.initialize_accounts(owner, amount).await;
         }
-        self.state.initialize_accounts(state).await;
-
         Ok(())
     }
 
+    // INSERT fn execute_operation CODE HERE
     async fn execute_operation(
         &mut self,
         operation: Self::Operation,
     ) -> Result<Self::Response, Self::Error> {
         match operation {
-            Operation::Balance { owner } => {
-                let balance = self.state.balance_or_default(&owner).await;
-                Ok(FungibleResponse::Balance(balance))
-            }
-
-            Operation::TickerSymbol => {
-                let params = self.runtime.application_parameters();
-                Ok(FungibleResponse::TickerSymbol(params.ticker_symbol))
-            }
-
             Operation::Transfer {
                 owner,
                 amount,
@@ -89,137 +68,57 @@ impl Contract for FungibleTokenContract {
             } => {
                 self.check_account_authentication(owner)?;
                 self.state.debit(owner, amount).await?;
-                self.finish_transfer_to_account(amount, target_account, owner)
+                self.finish_transfer_to_account(amount, target_account)
                     .await;
-                Ok(FungibleResponse::Ok)
-            }
-
-            Operation::Claim {
-                source_account,
-                amount,
-                target_account,
-            } => {
-                self.check_account_authentication(source_account.owner)?;
-                self.claim(source_account, amount, target_account).await?;
-                Ok(FungibleResponse::Ok)
+                Ok(())
             }
         }
     }
 
+    // INSERT fn execute_message CODE HERE
     async fn execute_message(&mut self, message: Message) -> Result<(), Self::Error> {
         match message {
-            Message::Credit {
-                amount,
-                target,
-                source,
-            } => {
-                let is_bouncing = self
-                    .runtime
-                    .message_is_bouncing()
-                    .expect("Message delivery status has to be available when executing a message");
-                let receiver = if is_bouncing { source } else { target };
-                self.state.credit(receiver, amount).await;
-            }
-            Message::Withdraw {
-                owner,
-                amount,
-                target_account,
-            } => {
-                self.check_account_authentication(owner)?;
-                self.state.debit(owner, amount).await?;
-                self.finish_transfer_to_account(amount, target_account, owner)
-                    .await;
+            Message::Credit { amount, owner } => {
+                self.state.credit(owner, amount).await;
+                Ok(())
             }
         }
-
-        Ok(())
     }
 }
 
 impl FungibleTokenContract {
+    // INSERT fn check_account_authentication CODE HERE
     /// Verifies that a transfer is authenticated for this local account.
-    fn check_account_authentication(&mut self, owner: AccountOwner) -> Result<(), Error> {
-        match owner {
-            AccountOwner::User(address) => {
-                ensure!(
-                    self.runtime.authenticated_signer() == Some(address),
-                    Error::IncorrectAuthentication
-                )
-            }
-            AccountOwner::Application(id) => {
-                ensure!(
-                    self.runtime.authenticated_caller_id() == Some(id),
-                    Error::IncorrectAuthentication
-                )
-            }
-        }
-
-        Ok(())
-    }
-
-    async fn claim(
-        &mut self,
-        source_account: Account,
-        amount: Amount,
-        target_account: Account,
-    ) -> Result<(), Error> {
-        if source_account.chain_id == self.runtime.chain_id() {
-            self.state.debit(source_account.owner, amount).await?;
-            self.finish_transfer_to_account(amount, target_account, source_account.owner)
-                .await;
+    fn check_account_authentication(&mut self, owner: Owner) -> Result<(), Error> {
+        if self.runtime.authenticated_signer() == Some(owner) {
+            Ok(())
         } else {
-            let message = Message::Withdraw {
-                owner: source_account.owner,
-                amount,
-                target_account,
-            };
-            self.runtime
-                .prepare_message(message)
-                .with_authentication()
-                .send_to(source_account.chain_id);
+            Err(Error::IncorrectAuthentication)
         }
-
-        Ok(())
     }
 
+    // INSERT fn finish_transfer_to_account CODE HERE
     /// Executes the final step of a transfer where the tokens are sent to the destination.
-    async fn finish_transfer_to_account(
-        &mut self,
-        amount: Amount,
-        target_account: Account,
-        source: AccountOwner,
-    ) {
-        if target_account.chain_id == self.runtime.chain_id() {
-            self.state.credit(target_account.owner, amount).await;
+    async fn finish_transfer_to_account(&mut self, amount: Amount, account: Account) {
+        if account.chain_id == self.runtime.chain_id() {
+            self.state.credit(account.owner, amount).await;
         } else {
             let message = Message::Credit {
-                target: target_account.owner,
+                owner: account.owner,
                 amount,
-                source,
             };
             self.runtime
                 .prepare_message(message)
                 .with_authentication()
-                .send_to(target_account.chain_id);
+                .send_to(account.chain_id);
         }
     }
 }
 
-// Dummy ComplexObject implementation, required by the graphql(complex) attribute in state.rs.
-#[async_graphql::ComplexObject]
-impl FungibleToken {}
-
+// INSERT enum Error CODE HERE
 /// An error that can occur during the contract execution.
 #[derive(Debug, Error)]
 pub enum Error {
-    /// Insufficient balance in source account.
-    #[error("Source account does not have sufficient balance for transfer")]
-    InsufficientBalance(#[from] state::InsufficientBalanceError),
-
-    /// Requested transfer does not have permission on this account.
-    #[error("The requested transfer is not correctly authenticated.")]
-    IncorrectAuthentication,
-
     /// Failed to deserialize BCS bytes
     #[error("Failed to deserialize BCS bytes")]
     BcsError(#[from] bcs::Error),
@@ -227,4 +126,50 @@ pub enum Error {
     /// Failed to deserialize JSON string
     #[error("Failed to deserialize JSON string")]
     JsonError(#[from] serde_json::Error),
+
+    #[error("Incorrect Authentication")]
+    IncorrectAuthentication,
+
+    #[error("Insufficient Balance")]
+    InsufficientBalance(#[from] state::InsufficientBalanceError),
+}
+
+#[cfg(test)]
+#[cfg(target_arch = "wasm32")]
+pub mod tests {
+    use super::*;
+    use futures::FutureExt;
+    use linera_sdk::views::{View, ViewStorageContext};
+    use std::str::FromStr;
+
+    use webassembly_test::webassembly_test;
+
+    #[webassembly_test]
+    pub fn init() {
+        let initial_amount = Amount::from_str("50_000").unwrap();
+        let fungible = create_and_init(initial_amount);
+        assert_eq!(
+            fungible.balance(&creator()).now_or_never().unwrap(),
+            initial_amount
+        )
+    }
+
+    fn create_and_init(amount: Amount) -> FungibleToken {
+        linera_sdk::test::mock_key_value_store();
+        let store = ViewStorageContext::default();
+        let mut fungible_token = FungibleToken::load(store).now_or_never().unwrap().unwrap();
+
+        fungible_token
+            .initialize_accounts(creator(), amount)
+            .now_or_never()
+            .unwrap();
+
+        fungible_token
+    }
+
+    fn creator() -> Owner {
+        "1c02a28d03e846b113de238d8880df3c9c802143b73aea5d173466701bee1786"
+            .parse()
+            .unwrap()
+    }
 }

@@ -1,85 +1,61 @@
 // Copyright (c) Zefchain Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-use fungible::InitialState;
-use linera_sdk::{
-    base::{AccountOwner, Amount},
-    views::{linera_views, MapView, RootView, ViewStorageContext},
-};
+use linera_sdk::base::{Amount, Owner};
+use linera_sdk::views::{linera_views, MapView, RootView, ViewStorageContext};
 use thiserror::Error;
 
-/// The application state.
 #[derive(RootView)]
 #[view(context = "ViewStorageContext")]
 pub struct FungibleToken {
-    pub accounts: MapView<AccountOwner, Amount>,
+    pub accounts: MapView<Owner, Amount>,
 }
 
 #[allow(dead_code)]
 impl FungibleToken {
-    /// Initializes the application state with some accounts with initial balances.
-    pub(crate) async fn initialize_accounts(&mut self, state: InitialState) {
-        for (k, v) in state.accounts {
-            if v != Amount::ZERO {
-                self.accounts
-                    .insert(&k, v)
-                    .expect("Error in insert statement");
-            }
-        }
+    // INSERT fn initialize_accounts CODE HERE
+    pub async fn initialize_accounts(&mut self, account: Owner, amount: Amount) {
+        self.accounts
+            .insert(&account, amount)
+            .expect("Error in insert statement")
     }
 
-    /// Obtains the balance for an `account`, returning None if there's no entry for the account.
-    pub(crate) async fn balance(&self, account: &AccountOwner) -> Option<Amount> {
+    // INSERT fn balance CODE HERE
+    pub async fn balance(&self, account: &Owner) -> Amount {
         self.accounts
             .get(account)
             .await
             .expect("Failure in the retrieval")
+            .unwrap_or(Amount::ZERO)
     }
 
-    /// Obtains the balance for an `account`.
-    pub(crate) async fn balance_or_default(&self, account: &AccountOwner) -> Amount {
-        self.balance(account).await.unwrap_or_default()
-    }
-
-    /// Credits an `account` with the provided `amount`.
-    pub(crate) async fn credit(&mut self, account: AccountOwner, amount: Amount) {
-        if amount == Amount::ZERO {
-            return;
-        }
-        let mut balance = self.balance_or_default(&account).await;
+    // INSERT fn credit CODE HERE
+    pub async fn credit(&mut self, account: Owner, amount: Amount) {
+        let mut balance = self.balance(&account).await;
         balance.saturating_add_assign(amount);
         self.accounts
             .insert(&account, balance)
-            .expect("Failed insert statement");
+            .expect("Failed to insert");
     }
 
-    /// Tries to debit the requested `amount` from an `account`.
-    pub(crate) async fn debit(
+    // INSERT fn debit CODE HERE
+    pub async fn debit(
         &mut self,
-        account: AccountOwner,
+        account: Owner,
         amount: Amount,
     ) -> Result<(), InsufficientBalanceError> {
-        if amount == Amount::ZERO {
-            return Ok(());
-        }
-        let mut balance = self.balance_or_default(&account).await;
+        let mut balance = self.balance(&account).await;
         balance
             .try_sub_assign(amount)
             .map_err(|_| InsufficientBalanceError)?;
-        if balance == Amount::ZERO {
-            self.accounts
-                .remove(&account)
-                .expect("Failed to remove an empty account");
-        } else {
-            self.accounts
-                .insert(&account, balance)
-                .expect("Failed insertion operation");
-        }
+        self.accounts
+            .insert(&account, balance)
+            .expect("Failed to insert");
         Ok(())
     }
 }
 
-/// Attempts to debit from an account with insufficient funds.
+// INSERT InsufficientBalanceError CODE HERE
 #[derive(Clone, Copy, Debug, Error)]
 #[error("Insufficient balance for transfer")]
 pub struct InsufficientBalanceError;
