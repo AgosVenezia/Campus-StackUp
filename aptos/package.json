@@ -1,6 +1,7 @@
 {
+  "packageManager": "pnpm@9.1.2",  
   "scripts": {
-    "stack_nft": "ts-node stack_nft.ts"
+    "stackcoin": "ts-node stackcoin.ts"
   },
   "dependencies": {
     "@aptos-labs/ts-sdk": "^1.13.0"
