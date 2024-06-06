@@ -36,10 +36,13 @@ fn main() -> Result<()> {
                 }
             };
         }
-        cli::AccountOpts::Delete { account, pin } => {
+        /*cli::AccountOpts::Delete { account, pin } => {
             database::delete_account(&account, &pin)?;
+        }*/
+        cli::AccountOpts::Delete { account: String, pin: String } => {
+            database::delete_account(account_number: &account, &pin)?;
         }
-        cli::AccountOpts::Create => {
+        /*cli::AccountOpts::Create => {
             let mut new_account = AccountNumber::default();
 
             let db = database::initialise_bankdb()?;
@@ -68,7 +71,16 @@ fn main() -> Result<()> {
                 "YOUR NEW ACCOUNT: `{}`\nYOUR PIN: `{}`\n",
                 &new_account, &pin_from_db
             );
-        }
+        }*/
+        cli::AccountOpts::Create => match database::Account::new() {
+            Ok(new_account: Account) => {
+                println!(
+                    "YOUR NEW ACCOUNT: `{}`\nYOUR PIN: `{}`\n",
+                    &new_account.account_number, &new_account.pin
+                );
+            }
+            Err(err: Error) => return Err(err),
+        },
     };
     Ok(())
-}
+} fn main

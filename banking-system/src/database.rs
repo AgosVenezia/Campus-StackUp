@@ -15,8 +15,18 @@ pub struct Account {
     pub pin: String,
 }
 
-fn database_path() -> PathBuf {
+/*fn database_path() -> PathBuf {
     PathBuf::from("bank.s3db")
+}*/
+
+#[cfg(not(test))]
+fn database_path() -> PathBuf {
+	PathBuf::from("bank.s3db")
+}
+
+#[cfg(test)]
+fn database_path() -> PathBuf {
+	PathBuf::from("mock_bank.s3db")
 }
 
 pub fn initialise_bankdb() -> Result<Connection> {
@@ -122,7 +132,7 @@ pub fn deposit(amount: &str, pin: &str, account_number: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn transfer(
+/*pub fn transfer(
     amount: &str,
     pin: &str,
     account_number1: &str,
@@ -192,6 +202,55 @@ pub fn transfer(
         eprintln!("Wrong pin. Try again...");
     }
     Ok(())
+}*/
+
+pub fn transfer(
+	amount: &str,
+	pin: &str,
+	origin_account: &str,
+	target_account: &str,
+) -> Result<(Account, Account)> {
+	if *origin_account == *target_account {
+    	return Err(rusqlite::Error::QueryReturnedNoRows); // Makes sense. We haven't returned any.
+	}
+
+	// Create new binding
+	let origin_account = fetch_account(origin_account)?;
+	let target_account = fetch_account(target_account)?;
+
+	let correct_pin = origin_account.pin == pin;
+
+	if correct_pin {
+
+    	let amount = amount
+        	.parse::<u64>().map_err(|_| {
+            	rusqlite::Error::QueryReturnedNoRows
+        	})?;
+
+    	if amount > origin_account.balance {
+    	} else {
+        	let db = initialise_bankdb()?;
+        	// Add money to account 2
+        	db.execute(
+            	"UPDATE account SET balance = balance + ?1 WHERE account_number=?2",
+            	(amount, &target_account.account_number),
+        	)?;
+
+        	// Subtract money from account 1
+        	db.execute(
+            	"UPDATE account SET balance = balance - ?1 WHERE account_number=?2",
+            	(amount, &origin_account.account_number),
+        	)?;
+
+    	};
+	} else {
+    	return Err(rusqlite::Error::QueryReturnedNoRows);
+	}
+
+	let origin_account = fetch_account(&origin_account.account_number)?;
+	let target_account = fetch_account(&target_account.account_number)?;
+
+	Ok((origin_account, target_account))
 }
 
 pub fn withdraw(amount: &str, pin: &str, account_number: &str) -> Result<()> {
@@ -287,3 +346,62 @@ pub fn show_balance(account_number: &str) -> Result<()> {
     );
     Ok(())
 }
+
+fn fetch_account(account: &str) -> Result<Account> {
+	let db = initialise_bankdb()?;
+	let mut stmt = db.prepare("SELECT id, account_number, balance, pin FROM account")?;
+	let accounts = stmt.query_map([], |row| {
+    	Ok(Account {
+        	id: row.get(0)?,
+        	account_number: row.get(1)?,
+        	balance: row.get(2)?,
+        	pin: row.get(3)?,
+    	})
+	})?;
+
+	let accounts = accounts.flatten().find(|acc| acc.account_number == account);
+	if let Some(fetched_account) = accounts {
+    		Ok(fetched_account)
+	} else {
+    		Err(rusqlite::Error::QueryReturnedNoRows)
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+	
+	#[test]
+	fn created_account_is_correct_fetched_from_db() -> Result<()> {
+    		let acc1 = Account::new()?;
+    		let acc2 = fetch_account(&acc1.account_number)?;
+
+    		assert_eq!(acc1.id, acc2.id);
+
+    		Ok(())
+	}
+}
+
+#[test]
+fn transferred_balance_is_correct() -> Result<()> {
+    // 1) Fill the missing code here
+    let deposit_balance = "10000";
+    
+// let's deposit first
+        deposit(deposit_balance, &origin_account.pin, &origin_account.account_number)?;
+    // 2) Fill the missing code here
+
+    assert_eq!(*deposit_balance, origin_account.balance.to_string());
+    // 3) Fill the missing code here
+
+
+assert_eq!("0".to_string(), origin_account.balance.to_string());
+        assert_eq!(deposit_balance.to_owned(), target_account.balance.to_string());
+    // Nothing further here
+    Ok(())
+}
+// Our test code for Step 1 below
+/*#[test]
+fn created_account_is_correct_fetched_from_db() -> Result<()> {
+// -- snipped --
+}*/
