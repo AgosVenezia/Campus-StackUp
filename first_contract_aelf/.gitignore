@@ -1,2 +1,4 @@
-obj/Debug
+src/obj/Debug
+test/obj/Debug
 
+.gitignore
