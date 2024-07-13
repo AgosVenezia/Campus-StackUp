@@ -1,0 +1,104 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "aliceAddr",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "alice",
+				"outputs": [
+					{
+						"internalType": "contract Alice",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_data",
+						"type": "uint256"
+					}
+				],
+				"name": "callSetData",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getData",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/Bob.sol": "Bob"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/Alice.sol": {
+			"keccak256": "0xfa44505c57318aeeef83cc7e9547fcc267c6d07d22a4ac873d42dcdb4f8bbf79",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a44e8bc6bf0bcbe185a039829fcfb69f5a36f976602fb83b8a35e728760e856e",
+				"dweb:/ipfs/QmP73H4QzzwTPsWNA4v1VsxwnAXS33DmabR8MvjRVBc7B8"
+			]
+		},
+		"contracts/Bob.sol": {
+			"keccak256": "0x0cffb553ce6873180871532ad5f75a4d7662e0e21c38a1536301d60999bb7885",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9e7a4a81213335ef1b117494050281c9060596ce6d92eadf698af5f6a03c262e",
+				"dweb:/ipfs/QmedRgVQzGLWKBdfRcs8BkdwPGN72kqDVBBNoWPQzX44Wv"
+			]
+		}
+	},
+	"version": 1
+}
