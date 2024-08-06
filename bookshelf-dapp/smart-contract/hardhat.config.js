@@ -12,4 +12,4 @@ module.exports = {
       accounts: [SEPOLIA_PRIVATE_KEY]
     }
   }
-};
+}; 
