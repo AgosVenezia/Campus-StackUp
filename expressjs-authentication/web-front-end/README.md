@@ -1,10 +1,6 @@
-# Frontend
+# web-front-end
 
-This contains the files for the webpage. This contains a basic login modal and a register modal.
-
-Before running, head to the [js](./js) directory and edit the
-[scripts.js](./js/scripts.js) file as necessary based on the note of the `README.md` located in the
-[js](./js) directory.
+The web frontend consists of a simple modal that gives access roles between admin or regular user.
 
 ## How to run
 
@@ -25,26 +21,31 @@ Make sure the backend is running. Instructions to run the backend is located at 
 
 ## File Structure
 
+`admin` and `user` roles have different access levels. `admin` can access both Admin page and User page.
+In contrast, `user` can only access User page.
+
+> [!NOTE]
+> Although the back-end code is not perfect e.g. clicking ***again*** the "Give User Rights" button will
+> lower the access rights of the user so it cannot access the Admin Page again, the effect of the
+> change in role access gives you an idea on how authorisation works.
+
+The directory structure (starting at the root of the project) looks like this
+
 ```
 .
-└── .
+└── web-front-end
     ├── index.html
     ├── js
-    │   ├── README.md
-    │   └── scripts.js
+    │   ├── README.md
+    │   └── scripts.js
     ├── pages
-    │   ├── profile.html
-    │   └── register.html
+    │   ├── admin.html
+    │   └── user.html
     ├── README.md
     └── styles
         └── styles.css
-
-5 directories, 7 files
 ```
 
-The `index.html` file is where the login logic resides. The `profile.html` file is where the profile section resides. The `register.html` is where the register logic resides.
-We also have `style.css` which contains the styling of our modals. Combining all this, the `scripts.js` allows the frontend to communicate with the backend such as
+You should take a look at `scripts.js` located at [js](./js) directory. This contains handling code where
+it talks to the backend for data processing.
 
-- authentication logins
-- registration
-- routing

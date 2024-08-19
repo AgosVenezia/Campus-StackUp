@@ -7,6 +7,7 @@ const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT | 4001;
+
 app.use(morgan("tiny"));
 
 const corsOptions = {

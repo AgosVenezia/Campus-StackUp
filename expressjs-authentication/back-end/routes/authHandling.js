@@ -1,20 +1,21 @@
 const express = require("express");
-const router = express.Router(); //change handler to this router
-const authentication = require("../service/security/authentication");
+const router = express.Router();
 
-//DB Files
-const authController = require("../controllers/authController");
+const authorisation = require("../service/security/authorisation.js");
 
-//Route
-router.post("/login", (req, res) => authController.login(req, res));
-router.post("/logout", (req, res) => authController.logout(req, res));
-router.post("/register", (req, res) => authController.register(req, res));
+const authController = require("../controllers/authController.js");
 
-router.get("/user", authentication, (req, res) =>
-	authController.load_user_profile(req, res),
+// Routes
+router.post("/grant/admin", (req, res) => authController.grant_admin(req, res));
+router.post("/grant/user", (req, res) => authController.grant_user(req, res));
+router.get("/load/admin", authorisation({ isAdmin: true }), (req, res) =>
+	authController.load_admin(req, res),
 );
-router.put("/user", authentication, (req, res) =>
-	authController.update_user_profile(req, res),
+router.get("/load/user", authorisation({ isAdmin: false }), (req, res) =>
+	authController.load_user(req, res),
+);
+router.post("/logout", authorisation({ isAdmin: false }), (req, res) =>
+	authController.logout(req, res),
 );
 
 module.exports = router;

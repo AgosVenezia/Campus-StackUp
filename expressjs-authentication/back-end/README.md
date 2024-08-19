@@ -1,6 +1,13 @@
 # Backend
 
-This directory contains the necessary parts of running the authentication algorithm for the frontend.
+This directory contains the necessary parts of running the authorisation algorithm for the frontend.
+
+> [!NOTE]
+> ***You should find some similarities between quest 1 code and quest 2 code***
+> such as the dependencies that are more or less the same. The only difference
+> would be we don't need to (de-)encrypt anything so, hence, bcryptjs, is not
+> useful for this source code.
+> We also do not need to store user data so no use for sequelize and sqlite3 here.
 
 ## Installing dependencies
 
@@ -54,7 +61,6 @@ The purpose of the environmental variables `TOKEN_KEY` and `PORT` are
 
 ## Dependencies
 
-- bcryptjs
 - body-parser
 - cookie-parser
 - cors
@@ -62,8 +68,6 @@ The purpose of the environmental variables `TOKEN_KEY` and `PORT` are
 - express
 - jsonwebtoken
 - morgan
-- sequelize
-- sqlite3
 
 These dependencies are used for the backend. We will only be describing the relevant ones.
 
@@ -80,17 +84,7 @@ allowing use of environmental variables in a contained environment rather than l
 > [!WARNING]
 > Private keys and tokens should be carefully hidden away from public. Make sure to add them to your `.gitignore` to avoid third-party access.
 
-### Sqlite3 and Sequelize
-
-[Sequelize](https://sequelize.org/docs/) is the ORM used to communicate with your database driver e.g. mariadb and sqlite3. It is used to initialise and perform database CRUD transactions easily
-abstracted away as Javascript or Typescript code. Sqlite3 is used as the database of choice for this simple project to store and manage account registration and logins.
-
-The ORM will take in the defined parameters from our code and convert it into an SQL query. Regular SQL queries are susceptible to SQL injections, giving hackers access to the data within the platform. The ORM will essentially act as the middleman to prevent the users from entering raw SQL queries.
-
 ### JSONWebToken
 
 JSON Web Tokens (JWTs) are a standardized way to securely send data between two parties. The JS/TS library is an implementation of this web encryption standard. This is used to encrypt passwords and session tokens for authenticated users.
 
-### BcryptJS
-
-This dependency encrypts the password of the account, it is the JavaScript implementation of the Bcrypt hashing algorithm, allowing you to use the hash encryption without having to meddle with complex hashing functions.

@@ -1,34 +1,37 @@
 # README
 
+Quest 1 source code and Quest 2 source code has similar structures so you
+can relate some similarities between these two codebases.
+
 ## File Structure
 
 ```
 .
 ├── back-end
-│   ├── app.js
-│   ├── controllers
-│   │   └── authController.js
-│   ├── models
-│   │   └── UserModel.js
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── README.md
-│   ├── routes
-│   │   └── authHandling.js
-│   ├── service
-│   │   ├── database
-│   │   │   └── db.js
-│   │   └── security
-│   │       └── authentication.js
-│   └── utils
-│       └── helper.js
+│   ├── app.js
+│   ├── controllers
+│   │   └── authController.js
+│   ├── models
+│   │   └── UserModel.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   ├── routes
+│   │   └── authHandling.js
+│   ├── service
+│   │   ├── database
+│   │   │   └── db.js
+│   │   └── security
+│   │       └── authentication.js
+│   └── utils
+│       └── helper.js
 └── web-front-end
     ├── index.html
     ├── js
-    │   └── scripts.js
+    │   └── scripts.js
     ├── pages
-    │   ├── profile.html
-    │   └── register.html
+    │   ├── profile.html
+    │   └── register.html
     ├── README.md
     └── styles
         └── styles.css
@@ -53,6 +56,7 @@ service --> database
 service --> security
 security <-.-> controllers
 utils <--> database --> models
+utils <--> controllers
 controllers .-> routes
 end
 subgraph f1[web-front-end]
@@ -62,3 +66,4 @@ index.html <-.-> js
 end
 routes <--> js
 ```
+

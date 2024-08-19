@@ -1,14 +1,5 @@
 # authController.js
 
-The `authController.js` file is in the controller directory. This is where
-the data is processed when the user is redirected after submitting their
-credentials in the login modal or registration modal.
+This file contains code that gives admin role, gives user role, loads admin page, load user page and finally, logout the current user by clearing the session cookie + jwt.
 
-The `authController.js` file also cleans up the login
-data after logging out.
-
-For already logged in (or more accurately, authenticated) users, the
-`authController.js` file allows user operations such as
-
-- loading their user profile; and
-- updating their user profile
+Most of the code is self-explanatory. If you have some questions, please ask away at [StackUp Discord](https://discord.com/channels/895564164783808523/1060491074109456454) if you find things confusing!

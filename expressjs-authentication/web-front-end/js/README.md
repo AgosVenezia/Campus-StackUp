@@ -9,3 +9,4 @@ the frontend.
 > Public by right-clicking the row of where the redirected URL is. Therefore, you have to replace http://localhost:4001 to the new
 > URL e.g. http://orange-marmalade.github.codespace.dev for the `BASE_URL`
 > variable.
+
