@@ -11,5 +11,5 @@ export const devnetClient = new Aptos(
   new AptosConfig({ network: Network.DEVNET })
 );
 
-/// FIXME: Put your client id here
-export const GOOGLE_CLIENT_ID = "1059721130254-ieg3db527ja5cq2ilda9mlk9e4ha6ede.apps.googleusercontent.com";
+/// FIXME: Put your client id here - OAuth Credentials for Google
+export const GOOGLE_CLIENT_ID = "";
