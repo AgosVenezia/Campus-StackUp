@@ -163,7 +163,7 @@ cython_debug/
 
 .gradio
 .gradio/certificate.pem
-output/*
+#output/*
 !output/.gitkeep
 app.py
 gradio-app.py
