@@ -168,6 +168,8 @@ if __name__ == "__main__":
 
 """
 
+"""
+
 from taipy.gui import Gui
 import taipy.gui.builder as tgb
 
@@ -193,3 +195,6 @@ pages = {
 
 # Run the application
 Gui(pages=pages).run()
+
+"""
+
