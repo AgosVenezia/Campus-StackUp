@@ -1,5 +1,5 @@
 const arr = [];
-for (let i = 2; i < 100; i+=2) {
+for (let i = 2; i < 100; i += 2) {
   const promise = new Promise((resolve, reject) => {
     if ((i % 2) === 0) {
       return resolve(i + 2);
